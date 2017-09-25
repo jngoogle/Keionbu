@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#8ecab2</color>
+
+    <!--custom color-->
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="color999">#999999</color>
+    <color name="color78a8a">#f78a8a</color>
+    <color name="color53">#535353</color>
+    <color name="color8c">#8c8c8c</color>
+
+    <!--night theme color-->
+    <color name="colorPrimaryNight">#313239</color>
+    <color name="colorPrimaryDarkNight">#202020</color>
+    <color name="colorAccentNight">#3863c9</color>
+</resources>

@@ -1,0 +1,79 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.jngoogle.keionbu.fragment.subTabFragment.NewSongsFragment">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:gravity="center_horizontal">
+
+
+                <!--广告ViewPager-->
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/vp_ads"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <!--小圆点指示器布局-->
+                <LinearLayout
+                    android:id="@+id/lay_dots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal" />
+
+            </RelativeLayout>
+
+            <!--私人FM 每日歌曲推荐 云音乐新歌榜-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp"
+                android:paddingTop="12dp">
+
+                <com.example.jngoogle.keionbu.customView.FeatureTabView
+                    android:id="@+id/tab_privateFm"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1" />
+
+                <com.example.jngoogle.keionbu.customView.FeatureTabView
+                    android:id="@+id/tab_dailyRecommend"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1" />
+
+                <!--轻音社音乐榜-->
+                <com.example.jngoogle.keionbu.customView.FeatureTabView
+                    android:id="@+id/tab_keionbuBillboard"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="350dp"
+                android:text="new songs" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_night"
+            android:icon="@mipmap/topmenu_icn_night"
+            android:title="夜间模式"/>
+        <item
+            android:id="@+id/nav_skin"
+            android:icon="@mipmap/topmenu_icn_skin"
+            android:title="主题换肤"/>
+        <item
+            android:id="@+id/nav_time"
+            android:icon="@mipmap/topmenu_icn_time"
+            android:title="定时关闭音乐"/>
+        <item
+            android:id="@+id/nav_download"
+            android:icon="@mipmap/topmenu_icn_download"
+            android:title="设置下载歌曲品质"/>
+
+    </group>
+
+</menu>

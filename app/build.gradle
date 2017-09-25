@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda' // add this into plugin
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.3"
+    defaultConfig {
+        applicationId "com.example.jngoogle.keionbu"
+        minSdkVersion 19
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+        }
+    }
+
+    compileOptions {
+        // 使用Java_1.8编译
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
+    // fresco
+    compile 'com.facebook.fresco:fresco:1.0.1'
+    // butterknife
+    compile 'com.jakewharton:butterknife:8.4.0'
+    // rxAndroid
+    compile 'io.reactivex:rxandroid:1.0.1'
+    // retrofit2
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile 'com.squareup.retrofit2:retrofit:2.0.2'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    // network interceptor
+    compile 'com.google.android.gms:play-services-appindexing:9.6.1'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.1.2'
+    testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+}
