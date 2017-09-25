@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.jngoogle.keionbu.fragment.searchFragment.HotTagFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_hot_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="24dp"
+            android:text="热门搜索" />
+
+        <!--热门标签区-->
+        <FrameLayout
+            android:id="@+id/lay_hot_words"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingLeft="20dp">
+
+            <TextView
+                android:id="@+id/text1"
+                style="@style/hotTage_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="周杰伦" />
+
+            <TextView
+                android:id="@+id/text2"
+                style="@style/hotTage_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="《三生三世十里桃花》" />
+
+            <TextView
+                android:id="@+id/text3"
+                style="@style/hotTage_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="薛之谦" />
+
+            <TextView
+                android:id="@+id/text4"
+                style="@style/hotTage_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="《告白气球》" />
+
+            <TextView
+                android:id="@+id/text5"
+                style="@style/hotTage_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="《Shape of you》" />
+
+            <TextView
+                android:id="@+id/text6"
+                style="@style/hotTage_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="《Shape of you》" />
+
+            <TextView
+                android:id="@+id/text7"
+                style="@style/hotTage_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="《Shape of you》" />
+
+            <TextView
+                android:id="@+id/text8"
+                style="@style/hotTage_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="《Shape of you》" />
+
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/colorf4" />
+
+    <!--搜索历史区-->
+    <ListView
+        android:id="@+id/lv_search_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

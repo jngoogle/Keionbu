@@ -22,8 +22,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.jngoogle.keionbu.R.id.tabLayout;
-
 public class DiscoverFragment extends Fragment {
 
     NewSongsFragment newSongsFragment;
@@ -39,7 +37,7 @@ public class DiscoverFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View layout = inflater.inflate(R.layout.fragment_discover, container, false);
         ButterKnife.bind(this, layout);
         initFragment();

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_search"
@@ -14,6 +13,7 @@
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
@@ -32,7 +32,7 @@
                 android:layout_marginLeft="@dimen/toolbar_padding_btn"
                 android:background="@color/colorPrimary"
                 android:padding="@dimen/toolbar_padding_btn"
-                android:src="@mipmap/toolback_back"/>
+                android:src="@mipmap/toolback_back" />
 
             <android.support.v7.widget.SearchView
                 android:id="@+id/searchView"
@@ -51,17 +51,16 @@
     <FrameLayout
         android:id="@+id/fgLay_hot_tag"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"></FrameLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/color999"/>
+        android:background="@color/color999" />
 
     <!--最近搜索词区-->
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorWhite"/>
+        android:background="@color/colorWhite" />
 </LinearLayout>

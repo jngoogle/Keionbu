@@ -1,13 +1,19 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.example.jngoogle.keionbu.fragment.subTabFragment.SongsListFragment">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/refresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.jngoogle.keionbu.fragment.subTabFragment.SongsListFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+        android:id="@+id/rv_songlist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="songslist"/>
+        android:layout_height="match_parent" />
 
-</FrameLayout>
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/rv_songlist"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+</LinearLayout>

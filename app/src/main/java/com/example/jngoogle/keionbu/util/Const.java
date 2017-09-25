@@ -13,11 +13,28 @@ public class Const {
     public static String songslist = "歌单";
     public static String ranking = "排行榜";
 
-    // newtwork const
-
+    // base url
     public static String BASE_URL = "http://tingapi.ting.baidu.com/";
-    // 获取榜单歌曲其中的一个参数
-    public static String methodPara = "baidu.ting.billboard.billList";
+
+    // 获取榜单歌曲
+    public static String methodBillboardPara = "baidu.ting.billboard.billList";
+    public static int OFFSET = 0;// 偏移量
+
+    // 获取宣传图的参数
+    public static String methodAdsPicPara = "baidu.ting.plaza.getFocusPic";
+    public static int ADS_PIC_NUM = 7;// 设置宣传图的总个数
+    public static int BILLBORAD_SIZE = 3;// 返回榜单的总数
+
+    // 获取搜索热词的参数
+    public static String methodSearchWordsPara = "baidu.ting.search.hot";
+
+    // 获取歌单参数
+    public static String methodSonglistPara = "baidu.ting.diy.gedan";
+    public static int PAGE_SIZE = 10;// 分页时，每页获取数据的条数
+
+    // 获取歌单内歌曲的参数
+    public static String methodSongsInSongListPara = "baidu.ting.diy.gedanInfo";
+
 
     //榜单类别
     //新歌榜

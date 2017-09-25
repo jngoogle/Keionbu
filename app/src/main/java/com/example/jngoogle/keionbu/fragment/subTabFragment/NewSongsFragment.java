@@ -3,38 +3,37 @@ package com.example.jngoogle.keionbu.fragment.subTabFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.example.jngoogle.keionbu.R;
 import com.example.jngoogle.keionbu.activity.VedioActivity;
+import com.example.jngoogle.keionbu.adapter.AdsViewPagerAdapter;
 import com.example.jngoogle.keionbu.customView.FeatureTabView;
-import com.example.jngoogle.keionbu.network.entity.AdPic;
 import com.example.jngoogle.keionbu.network.entity.AdsEntity;
 import com.example.jngoogle.keionbu.network.serviceManger.ServiceManger;
 import com.example.jngoogle.keionbu.util.Const;
 import com.example.jngoogle.keionbu.util.MySubscriber;
-import com.example.jngoogle.keionbu.util.NetWorkUtil;
-import com.example.jngoogle.keionbu.util.NotifyUtil;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import android.os.Handler;
-import android.widget.LinearLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -44,9 +43,15 @@ import rx.schedulers.Schedulers;
 public class NewSongsFragment extends Fragment {
 
     private static final int AUTO_SCORLLING = 1;// 自动播放viewpager
-    private String methodPara = Const.methodAdsPicPara;// 获取轮播宣传图参数
+    private static String methodAdsPara = Const.methodAdsPicPara;// 获取轮播宣传图参数
+    private static String methodSonglistPara = Const.methodSonglistPara;// 获取歌单的参数
+    private static int adsPicNum = Const.ADS_PIC_NUM;
 
     private List<View> adViews = new ArrayList<View>();
+
+    private int havemore = -1;// 1 代表还有更多的数据
+    private static int pageSize = Const.PAGE_SIZE;
+    private int curPage = 1;// 当前页
 
     @BindView(R.id.vp_ads)
     ViewPager adsVp;
@@ -58,6 +63,8 @@ public class NewSongsFragment extends Fragment {
     FeatureTabView dailyRecommend;// 每日推荐
     @BindView(R.id.tab_keionbuBillboard)
     FeatureTabView keionbuBillboard;// 轻音社音乐榜
+    @BindView(R.id.change_item_position)
+    Button changeItemPositionBtn;// 更改栏目顺序功能按钮
 
     private Handler handler = new Handler() {
         @Override
@@ -102,18 +109,17 @@ public class NewSongsFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
-        loadAdsPic();
+        getAdsPic(methodAdsPara, adsPicNum);
         Message msg = Message.obtain();
         msg.what = AUTO_SCORLLING;
         handler.sendEmptyMessageDelayed(AUTO_SCORLLING, 2000);
 
-
 //        handler.postDelayed(runnable, 2000);
     }
+
 
     @Override
     public void onStop() {
@@ -127,43 +133,52 @@ public class NewSongsFragment extends Fragment {
 
     }
 
-    // init viewpager indicator (small dots)
-//    private void initViewPager() {
-//
-//        adViews = new ArrayList<View>();
-//        int[] images = new int[]{
-//                R.mipmap.ad_first,
-//                R.mipmap.ad_second,
-//                R.mipmap.ad_third,
-//                R.mipmap.ad_fourth,
-//                R.mipmap.ad_five,
-//                R.mipmap.ad_six,
-//                R.mipmap.ad_seven};
-//
-//
-//        for (int i = 0; i < images.length; i++) {
-//            adViews.add(initItemView(images[i]));
-//        }
-//
-//        initDots(images);
-//    }
+    /**
+     * init [私人电台] [每日推荐] [轻音社音乐榜]
+     */
+    private void initFeatureTabView() {
+        privateFm.setText("私人电台");
+        dailyRecommend.setText("每日推荐");
+        keionbuBillboard.setText("轻音社音乐榜");
+
+        privateFm.setImageRes(R.drawable.selector_fm);
+        dailyRecommend.setImageRes(R.drawable.selector_daily);
+        keionbuBillboard.setImageRes(R.drawable.selector_kbill);
+
+        // 获取当前的日期，填充到每日推荐的图标中
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd");
+        String monthStr = dateFormat.format(new Date());
+        dailyRecommend.setDateText(monthStr);
+    }
+
+    @OnClick(R.id.change_item_position)
+    void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.change_item_position:
+
+                break;
+        }
+    }
 
     /**
      * 获取宣传图片
+     *
+     * @param methodPara
+     * @param adsPicNum  设置获取宣传图的总数
      */
-    private void loadAdsPic() {
+    private void getAdsPic(String methodPara, int adsPicNum) {
         ServiceManger.getInstance()
                 .getiAdsPicService()
-                .getAdsPic(methodPara, 7)
-                .flatMap(new Func1<AdsEntity, Observable<AdPic>>() {
+                .getAdsPic(methodPara, adsPicNum)
+                .flatMap(new Func1<AdsEntity, Observable<AdsEntity.AdPic>>() {
                     @Override
-                    public Observable<AdPic> call(AdsEntity adsEntity) {
+                    public Observable<AdsEntity.AdPic> call(AdsEntity adsEntity) {
                         return Observable.from(adsEntity.getAdPics());
                     }
                 })
-                .map(new Func1<AdPic, String>() {
+                .map(new Func1<AdsEntity.AdPic, String>() {
                     @Override
-                    public String call(AdPic adPic) {
+                    public String call(AdsEntity.AdPic adPic) {
                         return adPic.getRandpic();
                     }
                 })
@@ -187,24 +202,13 @@ public class NewSongsFragment extends Fragment {
                         });
                     }
                 });
-//                .subscribe(new Action1<List<String>>() {
-//                    @Override
-//                    public void call(List<String> strings) {
-//                        for (int i = 0; i < strings.size(); i++) {
-//                            Uri uri = Uri.parse(strings.get(i));
-//                            adViews.add(initItemView(uri));
-//                        }
-//
-//                        initDots(strings.size());
-//                        setViewPagerAdapter();
-//                    }
-//                });
     }
 
     /**
      * @param strings 宣传图的uriList
      */
     private void initViewPager(List<String> strings) {
+        adViews.clear();
         for (int i = 0; i < strings.size(); i++) {
             Uri uri = Uri.parse(strings.get(i));
             adViews.add(initItemView(uri));
@@ -224,6 +228,7 @@ public class NewSongsFragment extends Fragment {
         View layout = LayoutInflater.from(getContext()).inflate(R.layout.item_ad_viewpager, null);
         SimpleDraweeView draweeView = (SimpleDraweeView) layout.findViewById(R.id.iv_ad);
         draweeView.setImageURI(uri);
+        draweeView.setScaleType(ImageView.ScaleType.FIT_XY);
         draweeView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,20 +238,8 @@ public class NewSongsFragment extends Fragment {
         return layout;
     }
 
-//    private View initItemView(int res) {
-//        View layout = LayoutInflater.from(getContext()).inflate(R.layout.item_ad_viewpager, null);
-//        SimpleDraweeView draweeView = (SimpleDraweeView) layout.findViewById(R.id.iv_ad);
-//        draweeView.setImageResource(res);
-//        draweeView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getContext(), VedioActivity.class));
-//            }
-//        });
-//        return layout;
-//    }
-
     private void initDots(int picNum) {
+        dots_lay.removeAllViews();
         for (int i = 0; i < picNum; i++) {
             View dot_lay = LayoutInflater.from(getContext()).inflate(R.layout.dot_layout, null);
             dots_lay.addView(dot_lay);
@@ -256,52 +249,9 @@ public class NewSongsFragment extends Fragment {
     }
 
     private void setViewPagerAdapter() {
-        MyAdsViewPagerAdapter myAdsViewPagerAdapter = new MyAdsViewPagerAdapter(adViews);
-        adsVp.setAdapter(myAdsViewPagerAdapter);
+        AdsViewPagerAdapter adsViewPagerAdapter = new AdsViewPagerAdapter(adViews);
+        adsVp.setAdapter(adsViewPagerAdapter);
         adsVp.addOnPageChangeListener(new MyPageChangeListener());
-    }
-
-    /**
-     * init [私人电台] [每日推荐] [轻音社音乐榜]
-     */
-    private void initFeatureTabView() {
-        privateFm.setText("私人电台");
-        dailyRecommend.setText("每日推荐");
-        keionbuBillboard.setText("轻音社音乐榜");
-
-        privateFm.setImageRes(R.drawable.selector_fm);
-        dailyRecommend.setImageRes(R.drawable.selector_daily);
-        keionbuBillboard.setImageRes(R.drawable.selector_kbill);
-    }
-
-    private class MyAdsViewPagerAdapter extends PagerAdapter {
-
-        private List<View> views;
-
-        private MyAdsViewPagerAdapter(List<View> views) {
-            this.views = views;
-        }
-
-        @Override
-        public int getCount() {
-            return views.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(views.get(position));
-            return views.get(position);
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(views.get(position));
-        }
     }
 
     /**

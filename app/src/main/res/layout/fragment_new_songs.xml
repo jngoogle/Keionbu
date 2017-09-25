@@ -43,7 +43,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingBottom="8dp"
                 android:paddingTop="12dp">
 
                 <com.example.jngoogle.keionbu.customView.FeatureTabView
@@ -66,13 +65,47 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorf4" />
+
+            <!--存放三个不同板块的区域-->
+            <!--推荐歌单、新专辑上架、主播电台-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <!--需要动态的添加到布局中-->
+                <!--include recommend songlist-->
+                <!--include new album-->
+                <!--include radio-->
+
+            </LinearLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="350dp"
-                android:text="new songs" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="现在可以根据个人喜好，自由调整首页项目顺序啦~"
+                android:textSize="10sp" />
+            <!--更改布局的功能按钮-->
+            <Button
+                android:id="@+id/change_item_position"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/change_item_btn_background"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="调整栏目顺序"
+                android:textColor="@color/colorPrimary"
+                android:textSize="12sp" />
 
         </LinearLayout>
+
 
     </android.support.v4.widget.NestedScrollView>
 

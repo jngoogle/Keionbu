@@ -115,13 +115,6 @@ public class CommonViewHolder {
         return this;
     }
 
-    public CommonViewHolder setText(int viewId, int text) {
-        TextView textView = getView(viewId);
-        textView.setText(text);
-
-        return this;
-    }
-
 
     /**
      * 设置textView的文本的颜色

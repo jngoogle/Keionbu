@@ -11,11 +11,8 @@
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:listDivider">@drawable/divider</item>
     </style>
-
-    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>-->
-
-    <!--<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>-->
 
 
     <!--custom style-->
@@ -32,10 +29,33 @@
         <item name="tabGravity">fill</item>
     </style>
 
+    <!--排行榜歌曲文本样式-->
     <style name="ranking_text">
         <item name="android:textColor">@color/color8c</item>
         <item name="android:textSize">@dimen/ranking_text_size</item>
         <item name="android:padding">@dimen/ranking_text_padding</item>
+    </style>
+
+    <!--热门搜索标签样式-->
+    <style name="hotTage_text">
+        <item name="android:textColor">@color/color2b</item>
+        <item name="android:textSize">@dimen/hot_tag_text_size</item>
+        <item name="android:padding">@dimen/hot_tag_text_padding</item>
+        <item name="android:background">@drawable/hot_tag_background</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <!--歌单详情操作区操作按钮的样式-->
+    <style name="tab_menu_item">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:textColor">@color/colorWhite</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
 </resources>

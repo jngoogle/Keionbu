@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#f91b1e</color>
+    <color name="colorPrimaryDark">#a90205</color>
     <color name="colorAccent">#8ecab2</color>
 
     <!--custom color-->
@@ -9,7 +9,13 @@
     <color name="color999">#999999</color>
     <color name="color78a8a">#f78a8a</color>
     <color name="color53">#535353</color>
+    <color name="colora3">#73a3a3a3</color>
+    <color name="colorf4">#f4f4f4</color>
+    <color name="color2b">#2b2b2b</color>
     <color name="color8c">#8c8c8c</color>
+    <color name="color1e00">#1e000000</color>
+    <color name="colore6">#e6e6e6</color>
+    <color name="transparent">#00ffffff</color>
 
     <!--night theme color-->
     <color name="colorPrimaryNight">#313239</color>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/AppTheme.NoActionBar"
+    tools:context="com.example.jngoogle.keionbu.activity.SonglistDetailActivity">
+
+    <!--头部布局-->
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbarLay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <!--头部背景图-->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/topinfo_ban_bg"
+                app:layout_collapseParallaxMultiplier="0.7" />
+
+            <!--歌单信息-->
+            <LinearLayout
+                android:id="@+id/lay_songInfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="90dp"
+                android:orientation="vertical"
+                app:layout_collapseMode="pin"
+                app:layout_collapseParallaxMultiplier="0.7">
+
+                <!--歌单详细信息-->
+                <include
+                    layout="@layout/songlist_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!--歌单操作区-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <RadioGroup
+                        android:id="@+id/rg_tab_songlist"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:background="@null"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="3dp"
+                        android:paddingTop="3dp">
+
+                        <RadioButton
+                            android:id="@+id/rb_favorite"
+                            style="@style/tab_menu_item"
+                            android:checked="true"
+                            android:drawableTop="@mipmap/list_detail_icn_fav"
+                            android:text="收藏" />
+
+                        <RadioButton
+                            android:id="@+id/rb_commit"
+                            style="@style/tab_menu_item"
+                            android:checked="true"
+                            android:drawableTop="@mipmap/list_detail_icn_cmt"
+                            android:text="评论" />
+
+                        <RadioButton
+                            android:id="@+id/rb_share"
+                            style="@style/tab_menu_item"
+                            android:checked="true"
+                            android:drawableTop="@mipmap/list_detail_icn_share"
+                            android:text="分享" />
+
+                        <RadioButton
+                            android:id="@+id/rb_download"
+                            style="@style/tab_menu_item"
+                            android:checked="true"
+                            android:drawableTop="@mipmap/list_detail_icn_dld"
+                            android:text="下载" />
+
+                    </RadioGroup>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--toolbar-->
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_songlist_detail"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:paddingBottom="3dp"
+                android:paddingTop="25dp"
+                app:contentInsetStart="0.0dp"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+                <include layout="@layout/toolbar_with_search" />
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_songs_songlist"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:divider="@null"
+            android:paddingTop="5dp" />
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <!--列表底部播放器-->
+    <FrameLayout
+        android:id="@+id/fl_player_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="end|bottom" />
+
+</android.support.design.widget.CoordinatorLayout>

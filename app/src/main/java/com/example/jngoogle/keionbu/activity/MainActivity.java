@@ -37,7 +37,7 @@ public class MainActivity extends BaseActivity implements
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
 
-    // toolbar 主页面tab 组件
+    // toolbar widgets
     @BindView(R.id.rb_discover)
     RadioButton discoverRb;
     @BindView(R.id.rb_my_music)
@@ -49,7 +49,7 @@ public class MainActivity extends BaseActivity implements
     @BindView(R.id.radio_group)
     RadioGroup radioGroup;
 
-    private int lastTabId = R.id.rb_discover;// 初始化
+    private int lastTabId = R.id.rb_discover;
     private static final int discover = 0, myMusic = 1, friends = 2;
 
     DiscoverFragment discoverFragment;
@@ -62,34 +62,31 @@ public class MainActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        init();
+    }
 
-        // 解决抽屉布局 沉浸式标题栏问题
+    private void init() {
+        // solve immersive toolbar in drawerLayout
         // http://www.jianshu.com/p/34a8b40b9308
+        // http://www.liuling123.com/2017/02/transparent-status-bar.html
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             drawerLayout.setFitsSystemWindows(true);
             drawerLayout.setClipToPadding(false);
         }
 
-
         fmgr = getSupportFragmentManager();
         showFragment(discover);
-        radioGroup.setOnCheckedChangeListener(this);// 配置tab 的监听事件
+        radioGroup.setOnCheckedChangeListener(this);
         setSupportActionBar(toolbar);
         setDrawerAndNavi();
     }
 
-    /**
-     * 设置抽屉和菜单项的头部
-     */
     private void setDrawerAndNavi() {
         setDrawerToggle();
         navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setItemIconTintList(null);// 设置抽屉菜单的图标颜色（使用原本的颜色）
+        navigationView.setItemIconTintList(null);// set menu icon with it's original color
     }
 
-    /**
-     * 监听抽屉开关事件
-     */
     private void setDrawerToggle() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar,
@@ -100,14 +97,16 @@ public class MainActivity extends BaseActivity implements
     }
 
     /**
-     * 连按两次后退键退出App
+     * press twice to exit App
      */
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {// 抽屉打开了就由抽屉先消费此后退事件
+        // if drawer is opened currently, app close it first
+        // then if you click backup btn again, the app will exit
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            if (!ExitUtil.exitApp()) {// 再按一次退出
+            if (!ExitUtil.exitApp()) {
                 Toast.makeText(this, "再按一次退出", Toast.LENGTH_SHORT).show();
             } else {
                 finish();
@@ -115,42 +114,15 @@ public class MainActivity extends BaseActivity implements
             }
         }
     }
-    //        @Override
-    //        public boolean onCreateOptionsMenu(Menu menu) {
-    //            // Inflate the menu; this adds items to the action bar if it is present.
-    //            getMenuInflater().inflate(R.menu.main, menu);
-    //            return true;
-    //        }
 
-    //    @Override
-    //    public boolean onOptionsItemSelected(MenuItem item) {
-    //        // Handle action bar item clicks here. The action bar will
-    //        // automatically handle clicks on the Home/Up button, so long
-    //        // as you specify a parent activity in AndroidManifest.xml.
-    //        int id = item.getItemId();
-    //
-    //        //noinspection SimplifiableIfStatement
-    //        if (id == R.id.action_settings) {
-    //            return true;
-    //        }
-    //
-    //        return super.onOptionsItemSelected(item);
-    //    }
-
-    /**
-     * 菜单项 点击事件
-     *
-     * @param item
-     * @return
-     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_night://night theme
+            case R.id.nav_night:// night theme
                 break;
 
-            case R.id.nav_skin:
+            case R.id.nav_skin:// chage app's skin
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra("intent_key", "test share text to other app");
@@ -178,6 +150,7 @@ public class MainActivity extends BaseActivity implements
         if (checkedId != R.id.rb_search) {
             lastTabId = checkedId;
         }
+
         switch (checkedId) {
             case R.id.rb_discover:
                 showFragment(discover);
@@ -208,7 +181,7 @@ public class MainActivity extends BaseActivity implements
                     fmgr.beginTransaction().add(R.id.fg_content, discoverFragment).commit();
                 } else {
                     fmgr.beginTransaction().show(discoverFragment).commit();
-                    Log.d(TAG, "showFragment: discover exe");
+                    Log.d(TAG, "showFragment: discoverFragment");
                 }
                 break;
 
@@ -218,7 +191,7 @@ public class MainActivity extends BaseActivity implements
                     fmgr.beginTransaction().add(R.id.fg_content, myMusicFragment).commit();
                 } else {
                     fmgr.beginTransaction().show(myMusicFragment).commit();
-                    Log.d(TAG, "showFragment: music exe");
+                    Log.d(TAG, "showFragment: musicFragment");
                 }
                 break;
 
@@ -228,7 +201,7 @@ public class MainActivity extends BaseActivity implements
                     fmgr.beginTransaction().add(R.id.fg_content, friendsFragment).commit();
                 } else {
                     fmgr.beginTransaction().show(friendsFragment).commit();
-                    Log.d(TAG, "showFragment: friends exe");
+                    Log.d(TAG, "showFragment: friendsFragment");
                 }
                 break;
         }

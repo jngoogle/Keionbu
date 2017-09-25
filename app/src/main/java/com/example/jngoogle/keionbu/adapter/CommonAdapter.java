@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * 通用 Adapter
+ *
  * @param <B> 实体类（数据类）
  */
 public abstract class CommonAdapter<B> extends BaseAdapter {
@@ -56,7 +57,7 @@ public abstract class CommonAdapter<B> extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override

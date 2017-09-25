@@ -8,16 +8,21 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="toolbar_padding_top">25dp</dimen>
-    <dimen name="toolbar_padding_btn">11dp</dimen>
+    <dimen name="toolbar_padding_btn">15dp</dimen>
 
     <!--custom dimen-->
+    <!--排行榜单-->
     <dimen name="recycleView_margin">10dp</dimen>
     <dimen name="loading_margin">90dp</dimen>
     <dimen name="ranking_margin_top">10dp</dimen>
-
     <dimen name="ranking_pic_size">110dp</dimen>
     <dimen name="ranking_pic_margin">5dp</dimen>
     <dimen name="ranking_text_size">13sp</dimen>
     <dimen name="ranking_text_padding">1.8dp</dimen>
 
+    <!--搜索热词-->
+    <dimen name="hot_tag_text_size">16sp</dimen>
+    <dimen name="hot_tag_text_padding">7dp</dimen>
+    <!--recyclerview偏移量-->
+    <dimen name="divider_height">20dp</dimen>
 </resources>

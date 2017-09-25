@@ -9,6 +9,7 @@ import com.example.jngoogle.keionbu.util.Const;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.functions.Action1;
 
 public class SplashActivity extends BaseActivity {
 
@@ -17,23 +18,14 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // 延迟启动splash
-        //        Observable.timer(Const.getDelayTime(), TimeUnit.SECONDS)
-        //                .subscribe(new Action1<Long>() {
-        //                    @Override
-        //                    public void call(Long aLong) {
-        //                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
-        //                        finish();
-        //                    }
-        //                });
-
-        /**
-         * 延迟启动
-         */
+        // delay start
         Observable.timer(Const.DELAY_TIME, TimeUnit.SECONDS)
-                .subscribe(aLong -> {
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                    finish();
+                .subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                        finish();
+                    }
                 });
     }
 }
