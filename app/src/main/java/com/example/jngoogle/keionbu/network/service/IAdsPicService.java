@@ -6,7 +6,6 @@ package com.example.jngoogle.keionbu.network.service;
  */
 
 import com.example.jngoogle.keionbu.network.entity.AdsEntity;
-import com.example.jngoogle.keionbu.network.entity.RankingEntity;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -24,6 +23,7 @@ import rx.Observable;
  * 以上参数非必须
  * <p>
  * =============================
+ * <p>
  * method 和 num 为必须的参数
  * num 获取宣传图的总数
  */
