@@ -84,6 +84,15 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/test_api"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="现在可以根据个人喜好，自由调整首页项目顺序啦~"
+                android:textSize="10sp" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -95,8 +104,8 @@
                 android:id="@+id/change_item_position"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:layout_marginTop="5dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/change_item_btn_background"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"

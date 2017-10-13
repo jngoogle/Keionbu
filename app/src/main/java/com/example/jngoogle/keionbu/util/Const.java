@@ -35,6 +35,8 @@ public class Const {
     // 获取歌单内歌曲的参数
     public static String methodSongsInSongListPara = "baidu.ting.diy.gedanInfo";
 
+    // 获取电台参数
+    public static String methodRadioPara = "baidu.ting.radio.getRecommendRadioList";
 
     //榜单类别
     //新歌榜

@@ -13,12 +13,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.jngoogle.keionbu.R;
 import com.example.jngoogle.keionbu.activity.VedioActivity;
 import com.example.jngoogle.keionbu.adapter.AdsViewPagerAdapter;
 import com.example.jngoogle.keionbu.customView.FeatureTabView;
 import com.example.jngoogle.keionbu.network.entity.AdsEntity;
+import com.example.jngoogle.keionbu.network.entity.RadioEntity;
 import com.example.jngoogle.keionbu.network.serviceManger.ServiceManger;
 import com.example.jngoogle.keionbu.util.Const;
 import com.example.jngoogle.keionbu.util.MySubscriber;
@@ -45,6 +47,8 @@ public class NewSongsFragment extends Fragment {
     private static final int AUTO_SCORLLING = 1;// 自动播放viewpager
     private static String methodAdsPara = Const.methodAdsPicPara;// 获取轮播宣传图参数
     private static String methodSonglistPara = Const.methodSonglistPara;// 获取歌单的参数
+    private static String methodRadioPara = Const.methodRadioPara;// 获取歌单的参数
+
     private static int adsPicNum = Const.ADS_PIC_NUM;
 
     private List<View> adViews = new ArrayList<View>();
@@ -65,6 +69,8 @@ public class NewSongsFragment extends Fragment {
     FeatureTabView keionbuBillboard;// 轻音社音乐榜
     @BindView(R.id.change_item_position)
     Button changeItemPositionBtn;// 更改栏目顺序功能按钮
+    @BindView(R.id.test_api)
+    TextView testApiTv;
 
     private Handler handler = new Handler() {
         @Override
@@ -113,6 +119,7 @@ public class NewSongsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getAdsPic(methodAdsPara, adsPicNum);
+        getRecommendRadio(methodRadioPara);
         Message msg = Message.obtain();
         msg.what = AUTO_SCORLLING;
         handler.sendEmptyMessageDelayed(AUTO_SCORLLING, 2000);
@@ -200,6 +207,30 @@ public class NewSongsFragment extends Fragment {
                                 this.add("");
                             }
                         });
+                    }
+                });
+    }
+
+    /**
+     * 获取推荐电台
+     */
+    public void getRecommendRadio(String methodRadioPara) {
+        ServiceManger.getInstance()
+                .getiRadioService()
+                .getRadio(methodRadioPara)
+                .flatMap(new Func1<RadioEntity, Observable<RadioEntity.RadioBean>>() {
+                    @Override
+                    public Observable<RadioEntity.RadioBean> call(RadioEntity radioEntity) {
+                        return Observable.from(radioEntity.getList());
+                    }
+                })
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<List<RadioEntity.RadioBean>>(getContext()) {
+                    @Override
+                    public void onNext(List<RadioEntity.RadioBean> radioBeanList) {
+                        testApiTv.setText(radioBeanList.get(0).getTitle());
                     }
                 });
     }
