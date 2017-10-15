@@ -54,4 +54,7 @@ public class Const {
     //经典老哥榜
     public static int BILLBOARD_CLASSIC_OLD = 22;
 
+    //============= app 内部参数设置 ===========（以上均为网络api设置）
+
+    public static int SPAN_COUNT_RADIO = 3;// 推荐电台列表展示几列
 }

@@ -5,8 +5,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +22,10 @@ import com.example.jngoogle.keionbu.R;
 import com.example.jngoogle.keionbu.activity.VedioActivity;
 import com.example.jngoogle.keionbu.adapter.AdsViewPagerAdapter;
 import com.example.jngoogle.keionbu.customView.FeatureTabView;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Category;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.CategoryViewBinder;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Radio;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.RadioViewBinder;
 import com.example.jngoogle.keionbu.network.entity.AdsEntity;
 import com.example.jngoogle.keionbu.network.entity.RadioEntity;
 import com.example.jngoogle.keionbu.network.serviceManger.ServiceManger;
@@ -34,6 +41,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.drakeet.multitype.Items;
+import me.drakeet.multitype.MultiTypeAdapter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -71,6 +80,14 @@ public class NewSongsFragment extends Fragment {
     Button changeItemPositionBtn;// 更改栏目顺序功能按钮
     @BindView(R.id.test_api)
     TextView testApiTv;
+    @BindView(R.id.rv_radio)
+    RecyclerView radioRv;// 推荐电台列表
+
+    Items items;
+    MultiTypeAdapter multiTypeAdapter;
+    List<Uri> coverUriList = new ArrayList<>();
+    List<String> radioTitleList = new ArrayList<>();
+    List<String> radioDescList = new ArrayList<>();
 
     private Handler handler = new Handler() {
         @Override
@@ -112,6 +129,7 @@ public class NewSongsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_songs, container, false);
         ButterKnife.bind(this, view);
         initFeatureTabView();
+        initRadioView();
         return view;
     }
 
@@ -119,7 +137,7 @@ public class NewSongsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getAdsPic(methodAdsPara, adsPicNum);
-        getRecommendRadio(methodRadioPara);
+        loadData();
         Message msg = Message.obtain();
         msg.what = AUTO_SCORLLING;
         handler.sendEmptyMessageDelayed(AUTO_SCORLLING, 2000);
@@ -165,6 +183,35 @@ public class NewSongsFragment extends Fragment {
 
                 break;
         }
+    }
+
+    /**
+     * 定义推荐电台列表展示
+     */
+    private void initRadioView() {
+
+        items = new Items();
+        multiTypeAdapter = new MultiTypeAdapter();
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), Const.SPAN_COUNT_RADIO);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return items.get(position) instanceof Category ? Const.SPAN_COUNT_RADIO : 1;
+            }
+        });
+
+        radioRv.setLayoutManager(gridLayoutManager);
+        multiTypeAdapter.register(Category.class, new CategoryViewBinder());
+        multiTypeAdapter.register(Radio.class, new RadioViewBinder());
+        multiTypeAdapter.setItems(items);
+        radioRv.setAdapter(multiTypeAdapter);
+
+    }
+
+    private void loadData() {
+        items.add(new Category(R.mipmap.recommend_radio, "推荐电台"));
+        getRecommendRadio(methodRadioPara);
     }
 
     /**
@@ -230,6 +277,13 @@ public class NewSongsFragment extends Fragment {
                 .subscribe(new MySubscriber<List<RadioEntity.RadioBean>>(getContext()) {
                     @Override
                     public void onNext(List<RadioEntity.RadioBean> radioBeanList) {
+
+                        for (int i = 0; i < 3; i++) {
+                            items.add(new Radio(
+                                    Uri.parse(radioBeanList.get(i).getPic()),
+                                    radioBeanList.get(i).getTitle(),
+                                    radioBeanList.get(i).getDesc()));
+                        }
                         testApiTv.setText(radioBeanList.get(0).getTitle());
                     }
                 });
