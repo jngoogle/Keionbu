@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.StringDef;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
@@ -27,6 +26,7 @@ import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.CategoryVie
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Radio;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.RadioViewBinder;
 import com.example.jngoogle.keionbu.network.entity.AdsEntity;
+import com.example.jngoogle.keionbu.network.entity.NewAlbumEntity;
 import com.example.jngoogle.keionbu.network.entity.RadioEntity;
 import com.example.jngoogle.keionbu.network.serviceManger.ServiceManger;
 import com.example.jngoogle.keionbu.util.Const;
@@ -57,6 +57,7 @@ public class NewSongsFragment extends Fragment {
     private static String methodAdsPara = Const.methodAdsPicPara;// 获取轮播宣传图参数
     private static String methodSonglistPara = Const.methodSonglistPara;// 获取歌单的参数
     private static String methodRadioPara = Const.methodRadioPara;// 获取歌单的参数
+    private static String methodNewAlbumPara = Const.methodNewAlbumPara;// 获取新专辑的参数
 
     private static int adsPicNum = Const.ADS_PIC_NUM;
 
@@ -130,6 +131,7 @@ public class NewSongsFragment extends Fragment {
         ButterKnife.bind(this, view);
         initFeatureTabView();
         initRadioView();
+        getNewAlbumList(methodNewAlbumPara);
         return view;
     }
 
@@ -278,15 +280,39 @@ public class NewSongsFragment extends Fragment {
                     @Override
                     public void onNext(List<RadioEntity.RadioBean> radioBeanList) {
 
-                        for (int i = 0; i < 3; i++) {
+                        for (int i = 0; i < 6; i++) {
                             items.add(new Radio(
                                     Uri.parse(radioBeanList.get(i).getPic()),
                                     radioBeanList.get(i).getTitle(),
                                     radioBeanList.get(i).getDesc()));
                         }
-                        testApiTv.setText(radioBeanList.get(0).getTitle());
                     }
                 });
+    }
+
+    /**
+     * 获取新专辑
+     */
+    public void getNewAlbumList(String methodNewAlbumPara) {
+        ServiceManger.getInstance()
+                .getiNewAlbumService()
+                .getNewAlbumList(methodNewAlbumPara)// 这里获取新专辑的层级有点多，需要仔细
+                .flatMap(new Func1<NewAlbumEntity, Observable<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean>>() {
+                    @Override
+                    public Observable<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> call(NewAlbumEntity newAlbumEntity) {
+                        return Observable.from(newAlbumEntity.getPlaze_album_list().getRM().getAlbum_list().getList());
+                    }
+                })
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean>>(getContext()) {
+                    @Override
+                    public void onNext(List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> listBean) {
+                        testApiTv.setText(listBean.get(0).getAuthor());
+                    }
+                });
+
     }
 
     /**

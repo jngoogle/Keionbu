@@ -38,6 +38,9 @@ public class Const {
     // 获取电台参数
     public static String methodRadioPara = "baidu.ting.radio.getRecommendRadioList";
 
+    // 获取新专辑参数
+    public static String methodNewAlbumPara = "baidu.ting.plaza.getRecommendAlbum";
+
     //榜单类别
     //新歌榜
     public static int BILLBOARD_NEW_MUSIC = 1;
