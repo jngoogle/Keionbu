@@ -23,6 +23,8 @@ import com.example.jngoogle.keionbu.adapter.AdsViewPagerAdapter;
 import com.example.jngoogle.keionbu.customView.FeatureTabView;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Category;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.CategoryViewBinder;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.NewAlbum;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.NewAlbumViewBinder;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Radio;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.RadioViewBinder;
 import com.example.jngoogle.keionbu.network.entity.AdsEntity;
@@ -56,7 +58,7 @@ public class NewSongsFragment extends Fragment {
     private static final int AUTO_SCORLLING = 1;// 自动播放viewpager
     private static String methodAdsPara = Const.methodAdsPicPara;// 获取轮播宣传图参数
     private static String methodSonglistPara = Const.methodSonglistPara;// 获取歌单的参数
-    private static String methodRadioPara = Const.methodRadioPara;// 获取歌单的参数
+    private static String methodRadioPara = Const.methodRadioPara;// 获取电台的参数
     private static String methodNewAlbumPara = Const.methodNewAlbumPara;// 获取新专辑的参数
 
     private static int adsPicNum = Const.ADS_PIC_NUM;
@@ -131,7 +133,6 @@ public class NewSongsFragment extends Fragment {
         ButterKnife.bind(this, view);
         initFeatureTabView();
         initRadioView();
-        getNewAlbumList(methodNewAlbumPara);
         return view;
     }
 
@@ -206,14 +207,40 @@ public class NewSongsFragment extends Fragment {
         radioRv.setLayoutManager(gridLayoutManager);
         multiTypeAdapter.register(Category.class, new CategoryViewBinder());
         multiTypeAdapter.register(Radio.class, new RadioViewBinder());
-        multiTypeAdapter.setItems(items);
-        radioRv.setAdapter(multiTypeAdapter);
-
+        multiTypeAdapter.register(NewAlbum.class, new NewAlbumViewBinder());
     }
 
     private void loadData() {
+        items.clear();
         items.add(new Category(R.mipmap.recommend_radio, "推荐电台"));
         getRecommendRadio(methodRadioPara);
+        items.add(new Category(R.mipmap.recommend_newest, "新专辑上架"));
+        getNewAlbumList(methodNewAlbumPara);
+
+//        // 重新对数据进行排序，由于有部分数据是从网络获取的，目前的排序不是最终想要的顺序
+//        List<RadioEntity.RadioBean> radioList = new ArrayList<>();// 分类标题存放的地方
+//        List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> albumList = new ArrayList<>();// 分类标题存放的地方
+//        List<Object> dataList = new ArrayList<>();// 最终数据存放的地方
+//
+//        for (Object item : items) {
+//            if (item instanceof RadioEntity.RadioBean) {// 推荐电台的数据
+//                radioList.add((RadioEntity.RadioBean) item);
+//            }
+//
+//            if (item instanceof NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean) {// 新专辑的数据
+//                albumList.add((NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean) item);
+//            }
+//
+//        }
+
+//        items.add(new Category(R.mipmap.recommend_radio, "推荐电台"));
+//        items.add(radioList);
+//        items.add(new Category(R.mipmap.recommend_newest, "新专辑上架"));
+//        items.add(albumList);
+        multiTypeAdapter.setItems(items);
+        multiTypeAdapter.notifyDataSetChanged();
+        radioRv.setAdapter(multiTypeAdapter);
+
     }
 
     /**
@@ -309,7 +336,15 @@ public class NewSongsFragment extends Fragment {
                 .subscribe(new MySubscriber<List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean>>(getContext()) {
                     @Override
                     public void onNext(List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> listBean) {
-                        testApiTv.setText(listBean.get(0).getAuthor());
+
+                        for (int i = 0; i < 6; i++) {
+                            items.add(new NewAlbum(
+                                    Uri.parse(listBean.get(i).getPic_small()),
+                                    listBean.get(i).getTitle(),
+                                    listBean.get(i).getAuthor()));
+                        }
+
+//                        testApiTv.setText(listBean.get(0).getCountry());
                     }
                 });
 
