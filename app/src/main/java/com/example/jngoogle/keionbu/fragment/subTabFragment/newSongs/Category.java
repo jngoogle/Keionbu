@@ -9,8 +9,8 @@ package com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs;
  */
 public class Category {
 
-    int icon;
-    String title;
+    public int icon;
+    public String title;
 
     public Category(int icon, String title) {
         this.icon = icon;

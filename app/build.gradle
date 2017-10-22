@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda' // add this into plugin
 
+
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
@@ -22,9 +23,10 @@ android {
     }
 
     compileOptions {
-        // ä½¿ç”¨Java_1.8ç¼–è¯‘
+        // Ê¹ÓÃJava_1.8±àÒë
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        encoding "UTF-8"
     }
 }
 
