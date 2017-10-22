@@ -23,6 +23,8 @@ import com.example.jngoogle.keionbu.adapter.AdsViewPagerAdapter;
 import com.example.jngoogle.keionbu.customView.FeatureTabView;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Category;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.CategoryViewBinder;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.NewAlbum;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.NewAlbumViewBinder;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Radio;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.RadioViewBinder;
 import com.example.jngoogle.keionbu.network.entity.AdsEntity;
@@ -79,16 +81,13 @@ public class NewSongsFragment extends Fragment {
     FeatureTabView keionbuBillboard;// 轻音社音乐榜
     @BindView(R.id.change_item_position)
     Button changeItemPositionBtn;// 更改栏目顺序功能按钮
-    @BindView(R.id.test_api)
-    TextView testApiTv;
+    //    @BindView(R.id.test_api)
+//    TextView testApiTv;
     @BindView(R.id.rv_radio)
     RecyclerView radioRv;// 推荐电台列表
 
     Items items;
     MultiTypeAdapter multiTypeAdapter;
-    List<Uri> coverUriList = new ArrayList<>();
-    List<String> radioTitleList = new ArrayList<>();
-    List<String> radioDescList = new ArrayList<>();
 
     private Handler handler = new Handler() {
         @Override
@@ -131,7 +130,6 @@ public class NewSongsFragment extends Fragment {
         ButterKnife.bind(this, view);
         initFeatureTabView();
         initRadioView();
-        getNewAlbumList(methodNewAlbumPara);
         return view;
     }
 
@@ -206,14 +204,19 @@ public class NewSongsFragment extends Fragment {
         radioRv.setLayoutManager(gridLayoutManager);
         multiTypeAdapter.register(Category.class, new CategoryViewBinder());
         multiTypeAdapter.register(Radio.class, new RadioViewBinder());
+        multiTypeAdapter.register(NewAlbum.class, new NewAlbumViewBinder());
         multiTypeAdapter.setItems(items);
         radioRv.setAdapter(multiTypeAdapter);
 
     }
 
     private void loadData() {
+        items.clear();
         items.add(new Category(R.mipmap.recommend_radio, "推荐电台"));
         getRecommendRadio(methodRadioPara);
+
+        multiTypeAdapter.setItems(items);
+        multiTypeAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -287,6 +290,13 @@ public class NewSongsFragment extends Fragment {
                                     radioBeanList.get(i).getDesc()));
                         }
                     }
+
+                    @Override
+                    public void onCompleted() {
+                        super.onCompleted();
+                        items.add(new Category(R.mipmap.recommend_radio, "新专辑上架"));
+                        getNewAlbumList(methodNewAlbumPara);
+                    }
                 });
     }
 
@@ -309,7 +319,14 @@ public class NewSongsFragment extends Fragment {
                 .subscribe(new MySubscriber<List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean>>(getContext()) {
                     @Override
                     public void onNext(List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> listBean) {
-                        testApiTv.setText(listBean.get(0).getAuthor());
+//                        testApiTv.setText(listBean.get(0).getAuthor());
+
+                        for (int i = 0; i < 6; i++) {
+                            items.add(new NewAlbum(
+                                    Uri.parse(listBean.get(i).getPic_radio()),
+                                    listBean.get(i).getTitle(),
+                                    listBean.get(i).getAuthor()));
+                        }
                     }
                 });
 
