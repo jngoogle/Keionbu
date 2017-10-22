@@ -23,8 +23,6 @@ import com.example.jngoogle.keionbu.adapter.AdsViewPagerAdapter;
 import com.example.jngoogle.keionbu.customView.FeatureTabView;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Category;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.CategoryViewBinder;
-import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.NewAlbum;
-import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.NewAlbumViewBinder;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Radio;
 import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.RadioViewBinder;
 import com.example.jngoogle.keionbu.network.entity.AdsEntity;
@@ -39,8 +37,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.IntStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,56 +49,57 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
- * �������
+ * 新曲板块
  */
 public class NewSongsFragment extends Fragment {
 
-    private static final int AUTO_SCORLLING = 1;
-    private static String methodAdsPara = Const.methodAdsPicPara;
-    private static String methodSonglistPara = Const.methodSonglistPara;
-    private static String methodRadioPara = Const.methodRadioPara;
-    private static String methodNewAlbumPara = Const.methodNewAlbumPara;
+    private static final int AUTO_SCORLLING = 1;// 自动播放viewpager
+    private static String methodAdsPara = Const.methodAdsPicPara;// 获取轮播宣传图参数
+    private static String methodSonglistPara = Const.methodSonglistPara;// 获取歌单的参数
+    private static String methodRadioPara = Const.methodRadioPara;// 获取歌单的参数
+    private static String methodNewAlbumPara = Const.methodNewAlbumPara;// 获取新专辑的参数
 
     private static int adsPicNum = Const.ADS_PIC_NUM;
 
     private List<View> adViews = new ArrayList<View>();
 
-    private int havemore = -1;
+    private int havemore = -1;// 1 代表还有更多的数据
     private static int pageSize = Const.PAGE_SIZE;
-    private int curPage = 1;
+    private int curPage = 1;// 当前页
 
     @BindView(R.id.vp_ads)
     ViewPager adsVp;
     @BindView(R.id.lay_dots)
     LinearLayout dots_lay;
     @BindView(R.id.tab_privateFm)
-    FeatureTabView privateFm;
+    FeatureTabView privateFm;// 私人电台
     @BindView(R.id.tab_dailyRecommend)
-    FeatureTabView dailyRecommend;
+    FeatureTabView dailyRecommend;// 每日推荐
     @BindView(R.id.tab_keionbuBillboard)
-    FeatureTabView keionbuBillboard;
+    FeatureTabView keionbuBillboard;// 轻音社音乐榜
     @BindView(R.id.change_item_position)
-    Button changeItemPositionBtn;
-//    @BindView(R.id.test_api)
-//    TextView testApiTv;
+    Button changeItemPositionBtn;// 更改栏目顺序功能按钮
+    @BindView(R.id.test_api)
+    TextView testApiTv;
     @BindView(R.id.rv_radio)
-    RecyclerView radioRv;
+    RecyclerView radioRv;// 推荐电台列表
 
     Items items;
     MultiTypeAdapter multiTypeAdapter;
-    List<RadioEntity.RadioBean> radioList = new ArrayList<>();
-    List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> albumList = new ArrayList<>();
+    List<Uri> coverUriList = new ArrayList<>();
+    List<String> radioTitleList = new ArrayList<>();
+    List<String> radioDescList = new ArrayList<>();
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-
+                // handler是 uiHandler用来更新UI
                 case AUTO_SCORLLING:
                     int totalIndex = adViews.size();
                     int curIndex = adsVp.getCurrentItem();
                     int nextIndex = curIndex + 1;
-                    if (nextIndex >= totalIndex) {// auto show viewpager
+                    if (nextIndex >= totalIndex) {// 当超出页数则重新回到第一页viewpager
                         nextIndex = 0;
                     }
                     adsVp.setCurrentItem(nextIndex, true);
@@ -111,15 +108,15 @@ public class NewSongsFragment extends Fragment {
             }
         }
     };
-
+    // 两种不同的写法
 //    private Handler handler = new Handler();// UI handler
 //    private Runnable runnable = new Runnable() {
 //        @Override
-//        public void run() {
+//        public void run() {// 更新UI
 //            int totalIndex = adViews.size();
 //            int curIndex = adsVp.getCurrentItem();
 //            int nextIndex = curIndex + 1;
-//            if (nextIndex >= totalIndex) {// auto show viewpager
+//            if (nextIndex >= totalIndex) {// 当超出页数则重新回到第一页viewpager
 //                nextIndex = 0;
 //            }
 //            adsVp.setCurrentItem(nextIndex, true);
@@ -134,6 +131,7 @@ public class NewSongsFragment extends Fragment {
         ButterKnife.bind(this, view);
         initFeatureTabView();
         initRadioView();
+        getNewAlbumList(methodNewAlbumPara);
         return view;
     }
 
@@ -162,15 +160,19 @@ public class NewSongsFragment extends Fragment {
 
     }
 
+    /**
+     * init [私人电台] [每日推荐] [轻音社音乐榜]
+     */
     private void initFeatureTabView() {
-        privateFm.setText("私人FM");
+        privateFm.setText("私人电台");
         dailyRecommend.setText("每日推荐");
-        keionbuBillboard.setText("新歌榜");
+        keionbuBillboard.setText("轻音社音乐榜");
 
         privateFm.setImageRes(R.drawable.selector_fm);
         dailyRecommend.setImageRes(R.drawable.selector_daily);
         keionbuBillboard.setImageRes(R.drawable.selector_kbill);
 
+        // 获取当前的日期，填充到每日推荐的图标中
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd");
         String monthStr = dateFormat.format(new Date());
         dailyRecommend.setDateText(monthStr);
@@ -186,7 +188,7 @@ public class NewSongsFragment extends Fragment {
     }
 
     /**
-     * init radioview
+     * 定义推荐电台列表展示
      */
     private void initRadioView() {
 
@@ -204,23 +206,21 @@ public class NewSongsFragment extends Fragment {
         radioRv.setLayoutManager(gridLayoutManager);
         multiTypeAdapter.register(Category.class, new CategoryViewBinder());
         multiTypeAdapter.register(Radio.class, new RadioViewBinder());
-        multiTypeAdapter.register(NewAlbum.class, new NewAlbumViewBinder());
+        multiTypeAdapter.setItems(items);
+        radioRv.setAdapter(multiTypeAdapter);
+
     }
 
     private void loadData() {
-        items.clear();
         items.add(new Category(R.mipmap.recommend_radio, "推荐电台"));
         getRecommendRadio(methodRadioPara);
-
-        multiTypeAdapter.setItems(items);
-        multiTypeAdapter.notifyDataSetChanged();
-        radioRv.setAdapter(multiTypeAdapter);
     }
 
     /**
-     * get ads pictures
+     * 获取宣传图片
+     *
      * @param methodPara
-     * @param adsPicNum
+     * @param adsPicNum  设置获取宣传图的总数
      */
     private void getAdsPic(String methodPara, int adsPicNum) {
         ServiceManger.getInstance()
@@ -250,6 +250,7 @@ public class NewSongsFragment extends Fragment {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
+                        // 当网络请求不到图片，使用默认宣传图片
                         initViewPager(new ArrayList<String>() {
                             {
                                 this.add("");
@@ -260,7 +261,7 @@ public class NewSongsFragment extends Fragment {
     }
 
     /**
-     * get recommend radio
+     * 获取推荐电台
      */
     public void getRecommendRadio(String methodRadioPara) {
         ServiceManger.getInstance()
@@ -286,28 +287,16 @@ public class NewSongsFragment extends Fragment {
                                     radioBeanList.get(i).getDesc()));
                         }
                     }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        items.add(new Category(R.mipmap.recommend_newest, "新专辑上架"));
-                        getNewAlbumList(methodNewAlbumPara);
-//                        for (Object item : items) {
-//                            if (item instanceof RadioEntity.RadioBean) {
-//                                radioList.add((RadioEntity.RadioBean) item);
-//                            }
-//                        }
-                    }
                 });
     }
 
     /**
-     * get new albumlist
+     * 获取新专辑
      */
     public void getNewAlbumList(String methodNewAlbumPara) {
         ServiceManger.getInstance()
                 .getiNewAlbumService()
-                .getNewAlbumList(methodNewAlbumPara)
+                .getNewAlbumList(methodNewAlbumPara)// 这里获取新专辑的层级有点多，需要仔细
                 .flatMap(new Func1<NewAlbumEntity, Observable<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean>>() {
                     @Override
                     public Observable<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> call(NewAlbumEntity newAlbumEntity) {
@@ -320,20 +309,15 @@ public class NewSongsFragment extends Fragment {
                 .subscribe(new MySubscriber<List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean>>(getContext()) {
                     @Override
                     public void onNext(List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> listBean) {
-
-                        for (int i = 0; i < 6; i++) {
-                            items.add(new NewAlbum(
-                                    Uri.parse(listBean.get(i).getPic_radio()),
-                                    listBean.get(i).getTitle(),
-                                    listBean.get(i).getAuthor()));
-                        }
-
-//                        testApiTv.setText(listBean.get(0).getCountry());
+                        testApiTv.setText(listBean.get(0).getAuthor());
                     }
                 });
+
     }
 
-
+    /**
+     * @param strings 宣传图的uriList
+     */
     private void initViewPager(List<String> strings) {
         adViews.clear();
         for (int i = 0; i < strings.size(); i++) {
