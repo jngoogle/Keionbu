@@ -57,52 +57,52 @@ import rx.schedulers.Schedulers;
  */
 public class NewSongsFragment extends Fragment {
 
-    private static final int AUTO_SCORLLING = 1;// �Զ�����viewpager
-    private static String methodAdsPara = Const.methodAdsPicPara;// ��ȡ�ֲ�����ͼ����
-    private static String methodSonglistPara = Const.methodSonglistPara;// ��ȡ�赥�Ĳ���
-    private static String methodRadioPara = Const.methodRadioPara;// ��ȡ��̨�Ĳ���
-    private static String methodNewAlbumPara = Const.methodNewAlbumPara;// ��ȡ��ר���Ĳ���
+    private static final int AUTO_SCORLLING = 1;
+    private static String methodAdsPara = Const.methodAdsPicPara;
+    private static String methodSonglistPara = Const.methodSonglistPara;
+    private static String methodRadioPara = Const.methodRadioPara;
+    private static String methodNewAlbumPara = Const.methodNewAlbumPara;
 
     private static int adsPicNum = Const.ADS_PIC_NUM;
 
     private List<View> adViews = new ArrayList<View>();
 
-    private int havemore = -1;// 1 �����и��������
+    private int havemore = -1;
     private static int pageSize = Const.PAGE_SIZE;
-    private int curPage = 1;// ��ǰҳ
+    private int curPage = 1;
 
     @BindView(R.id.vp_ads)
     ViewPager adsVp;
     @BindView(R.id.lay_dots)
     LinearLayout dots_lay;
     @BindView(R.id.tab_privateFm)
-    FeatureTabView privateFm;// ˽�˵�̨
+    FeatureTabView privateFm;
     @BindView(R.id.tab_dailyRecommend)
-    FeatureTabView dailyRecommend;// ÿ���Ƽ�
+    FeatureTabView dailyRecommend;
     @BindView(R.id.tab_keionbuBillboard)
-    FeatureTabView keionbuBillboard;// ���������ְ�
+    FeatureTabView keionbuBillboard;
     @BindView(R.id.change_item_position)
-    Button changeItemPositionBtn;// ������Ŀ˳���ܰ�ť
+    Button changeItemPositionBtn;
 //    @BindView(R.id.test_api)
 //    TextView testApiTv;
     @BindView(R.id.rv_radio)
-    RecyclerView radioRv;// �Ƽ���̨�б�
+    RecyclerView radioRv;
 
     Items items;
     MultiTypeAdapter multiTypeAdapter;
-    List<RadioEntity.RadioBean> radioList = new ArrayList<>();// ��������ŵĵط�
-    List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> albumList = new ArrayList<>();// ��������ŵĵط�
+    List<RadioEntity.RadioBean> radioList = new ArrayList<>();
+    List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> albumList = new ArrayList<>();
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                // handler�� uiHandler��������UI
+
                 case AUTO_SCORLLING:
                     int totalIndex = adViews.size();
                     int curIndex = adsVp.getCurrentItem();
                     int nextIndex = curIndex + 1;
-                    if (nextIndex >= totalIndex) {// ������ҳ�������»ص���һҳviewpager
+                    if (nextIndex >= totalIndex) {// auto show viewpager
                         nextIndex = 0;
                     }
                     adsVp.setCurrentItem(nextIndex, true);
@@ -111,15 +111,15 @@ public class NewSongsFragment extends Fragment {
             }
         }
     };
-    // ���ֲ�ͬ��д��
+
 //    private Handler handler = new Handler();// UI handler
 //    private Runnable runnable = new Runnable() {
 //        @Override
-//        public void run() {// ����UI
+//        public void run() {
 //            int totalIndex = adViews.size();
 //            int curIndex = adsVp.getCurrentItem();
 //            int nextIndex = curIndex + 1;
-//            if (nextIndex >= totalIndex) {// ������ҳ�������»ص���һҳviewpager
+//            if (nextIndex >= totalIndex) {// auto show viewpager
 //                nextIndex = 0;
 //            }
 //            adsVp.setCurrentItem(nextIndex, true);
@@ -162,19 +162,15 @@ public class NewSongsFragment extends Fragment {
 
     }
 
-    /**
-     * init [˽�˵�̨] [ÿ���Ƽ�] [���������ְ�]
-     */
     private void initFeatureTabView() {
-        privateFm.setText("˽�˵�̨");
-        dailyRecommend.setText("ÿ���Ƽ�");
-        keionbuBillboard.setText("���������ְ�");
+        privateFm.setText("私人FM");
+        dailyRecommend.setText("每日推荐");
+        keionbuBillboard.setText("新歌榜");
 
         privateFm.setImageRes(R.drawable.selector_fm);
         dailyRecommend.setImageRes(R.drawable.selector_daily);
         keionbuBillboard.setImageRes(R.drawable.selector_kbill);
 
-        // ��ȡ��ǰ�����ڣ���䵽ÿ���Ƽ���ͼ����
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd");
         String monthStr = dateFormat.format(new Date());
         dailyRecommend.setDateText(monthStr);
@@ -190,7 +186,7 @@ public class NewSongsFragment extends Fragment {
     }
 
     /**
-     * �����Ƽ���̨�б�չʾ
+     * init radioview
      */
     private void initRadioView() {
 
@@ -213,7 +209,7 @@ public class NewSongsFragment extends Fragment {
 
     private void loadData() {
         items.clear();
-        items.add(new Category(R.mipmap.recommend_radio, "�Ƽ���̨"));
+        items.add(new Category(R.mipmap.recommend_radio, "推荐电台"));
         getRecommendRadio(methodRadioPara);
 
         multiTypeAdapter.setItems(items);
@@ -222,10 +218,9 @@ public class NewSongsFragment extends Fragment {
     }
 
     /**
-     * ��ȡ����ͼƬ
-     *
+     * get ads pictures
      * @param methodPara
-     * @param adsPicNum  ���û�ȡ����ͼ������
+     * @param adsPicNum
      */
     private void getAdsPic(String methodPara, int adsPicNum) {
         ServiceManger.getInstance()
@@ -255,7 +250,6 @@ public class NewSongsFragment extends Fragment {
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        // ���������󲻵�ͼƬ��ʹ��Ĭ������ͼƬ
                         initViewPager(new ArrayList<String>() {
                             {
                                 this.add("");
@@ -266,7 +260,7 @@ public class NewSongsFragment extends Fragment {
     }
 
     /**
-     * ��ȡ�Ƽ���̨
+     * get recommend radio
      */
     public void getRecommendRadio(String methodRadioPara) {
         ServiceManger.getInstance()
@@ -296,7 +290,7 @@ public class NewSongsFragment extends Fragment {
                     @Override
                     public void onCompleted() {
                         super.onCompleted();
-                        items.add(new Category(R.mipmap.recommend_newest, "��ר���ϼ�"));
+                        items.add(new Category(R.mipmap.recommend_newest, "新专辑上架"));
                         getNewAlbumList(methodNewAlbumPara);
 //                        for (Object item : items) {
 //                            if (item instanceof RadioEntity.RadioBean) {
@@ -308,12 +302,12 @@ public class NewSongsFragment extends Fragment {
     }
 
     /**
-     * ��ȡ��ר��
+     * get new albumlist
      */
     public void getNewAlbumList(String methodNewAlbumPara) {
         ServiceManger.getInstance()
                 .getiNewAlbumService()
-                .getNewAlbumList(methodNewAlbumPara)// �����ȡ��ר���Ĳ㼶�е�࣬��Ҫ��ϸ
+                .getNewAlbumList(methodNewAlbumPara)
                 .flatMap(new Func1<NewAlbumEntity, Observable<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean>>() {
                     @Override
                     public Observable<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> call(NewAlbumEntity newAlbumEntity) {
@@ -339,9 +333,7 @@ public class NewSongsFragment extends Fragment {
                 });
     }
 
-    /**
-     * @param strings ����ͼ��uriList
-     */
+
     private void initViewPager(List<String> strings) {
         adViews.clear();
         for (int i = 0; i < strings.size(); i++) {
