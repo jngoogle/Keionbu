@@ -87,6 +87,7 @@ public class NewSongsFragment extends Fragment {
     RecyclerView radioRv;// 推荐电台列表
 
     Items items;
+    Items radioItems, newAlbumItems;
     MultiTypeAdapter multiTypeAdapter;
 
     private Handler handler = new Handler() {
@@ -191,6 +192,8 @@ public class NewSongsFragment extends Fragment {
     private void initRadioView() {
 
         items = new Items();
+        radioItems = new Items();
+        newAlbumItems = new Items();
         multiTypeAdapter = new MultiTypeAdapter();
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), Const.SPAN_COUNT_RADIO);
@@ -211,11 +214,17 @@ public class NewSongsFragment extends Fragment {
     }
 
     private void loadData() {
-        items.clear();
-        items.add(new Category(R.mipmap.recommend_radio, "推荐电台"));
         getRecommendRadio(methodRadioPara);
+        getNewAlbumList(methodNewAlbumPara);
+    }
 
-        multiTypeAdapter.setItems(items);
+    /**
+     * 重新加载数据，处理布局顺序问题
+     */
+    private void reloadItems() {
+        items.clear();
+        items.addAll(radioItems);
+        items.addAll(newAlbumItems);
         multiTypeAdapter.notifyDataSetChanged();
     }
 
@@ -282,20 +291,16 @@ public class NewSongsFragment extends Fragment {
                 .subscribe(new MySubscriber<List<RadioEntity.RadioBean>>(getContext()) {
                     @Override
                     public void onNext(List<RadioEntity.RadioBean> radioBeanList) {
-
+                        radioItems.clear();
+                        radioItems.add(new Category(R.mipmap.recommend_radio, "推荐电台"));
                         for (int i = 0; i < 6; i++) {
-                            items.add(new Radio(
+                            radioItems.add(new Radio(
                                     Uri.parse(radioBeanList.get(i).getPic()),
                                     radioBeanList.get(i).getTitle(),
                                     radioBeanList.get(i).getDesc()));
                         }
-                    }
 
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                        items.add(new Category(R.mipmap.recommend_radio, "新专辑上架"));
-                        getNewAlbumList(methodNewAlbumPara);
+                        reloadItems();
                     }
                 });
     }
@@ -320,13 +325,16 @@ public class NewSongsFragment extends Fragment {
                     @Override
                     public void onNext(List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> listBean) {
 //                        testApiTv.setText(listBean.get(0).getAuthor());
-
+                        newAlbumItems.clear();
+                        newAlbumItems.add(new Category(R.mipmap.recommend_radio, "新专辑上架"));
                         for (int i = 0; i < 6; i++) {
-                            items.add(new NewAlbum(
+                            newAlbumItems.add(new NewAlbum(
                                     Uri.parse(listBean.get(i).getPic_radio()),
                                     listBean.get(i).getTitle(),
                                     listBean.get(i).getAuthor()));
                         }
+
+                        reloadItems();
                     }
                 });
 

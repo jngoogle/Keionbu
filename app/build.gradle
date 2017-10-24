@@ -26,7 +26,6 @@ android {
         //  π”√Java_1.8±‡“Î
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-        encoding "UTF-8"
     }
 }
 
