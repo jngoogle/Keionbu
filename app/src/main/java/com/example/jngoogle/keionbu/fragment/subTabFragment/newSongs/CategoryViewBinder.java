@@ -7,11 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.jngoogle.keionbu.R;
 
 import me.drakeet.multitype.ItemViewBinder;
-import me.drakeet.multitype.Items;
 
 /**
  * Created by Administrator on 2017/10/14 0014.
@@ -30,7 +30,7 @@ public class CategoryViewBinder extends ItemViewBinder<Category, CategoryViewBin
         holder.bind(category);
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView iconIv;
         TextView titleTv;
@@ -47,6 +47,24 @@ public class CategoryViewBinder extends ItemViewBinder<Category, CategoryViewBin
         public void bind(Category category) {
             iconIv.setImageResource(category.icon);
             titleTv.setText(category.title);
+            moreTv.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.tv_more:
+                    if (titleTv.getText().equals("推荐电台")) {
+                        // turn to radio content activity
+                        Toast.makeText(v.getContext(), "推荐电台的更多", Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (titleTv.getText().equals("新专辑上架")) {
+                        // turn to new album content activity
+                        Toast.makeText(v.getContext(), "新专辑上架的更多", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
         }
     }
 }
