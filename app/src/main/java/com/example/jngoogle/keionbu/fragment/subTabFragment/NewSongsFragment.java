@@ -85,9 +85,8 @@ public class NewSongsFragment extends Fragment {
     @BindView(R.id.rv_radio)
     RecyclerView radioRv;// 推荐电台列表
 
-    Items items;// 总体的items
+    Items items;
     Items radioItems, newAlbumItems;
-
     MultiTypeAdapter multiTypeAdapter;
 
     private Handler handler = new Handler() {
@@ -218,7 +217,11 @@ public class NewSongsFragment extends Fragment {
     }
 
     /**
+<<<<<<< HEAD
      * 重新整理数据顺序
+=======
+     * 重新加载数据，处理布局顺序问题
+>>>>>>> da8e4478b4fadc4f7da14338966b15714fd6c826
      */
     private void reloadItems() {
         items.clear();
@@ -324,7 +327,6 @@ public class NewSongsFragment extends Fragment {
                     @Override
                     public void onNext(List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> listBean) {
 //                        testApiTv.setText(listBean.get(0).getAuthor());
-
                         newAlbumItems.clear();
                         newAlbumItems.add(new Category(R.mipmap.recommend_radio, "新专辑上架"));
                         for (int i = 0; i < 6; i++) {
