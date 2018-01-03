@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="190dp"
-    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="5dp">
 
@@ -16,8 +16,8 @@
             android:id="@+id/songlist_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            fresco:failureImage="@mipmap/placeholder_disk_210"
-            android:src="@mipmap/ad_five" />
+            android:src="@mipmap/ad_five"
+            fresco:failureImage="@mipmap/placeholder_disk_210" />
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -80,8 +80,6 @@ public class NewSongsFragment extends Fragment {
     FeatureTabView keionbuBillboard;// 轻音社音乐榜
     @BindView(R.id.change_item_position)
     Button changeItemPositionBtn;// 更改栏目顺序功能按钮
-    //    @BindView(R.id.test_api)
-//    TextView testApiTv;
     @BindView(R.id.rv_radio)
     RecyclerView radioRv;// 推荐电台列表
 
@@ -217,11 +215,8 @@ public class NewSongsFragment extends Fragment {
     }
 
     /**
-<<<<<<< HEAD
-     * 重新整理数据顺序
-=======
+     *
      * 重新加载数据，处理布局顺序问题
->>>>>>> da8e4478b4fadc4f7da14338966b15714fd6c826
      */
     private void reloadItems() {
         items.clear();
@@ -326,7 +321,6 @@ public class NewSongsFragment extends Fragment {
                 .subscribe(new MySubscriber<List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean>>(getContext()) {
                     @Override
                     public void onNext(List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> listBean) {
-//                        testApiTv.setText(listBean.get(0).getAuthor());
                         newAlbumItems.clear();
                         newAlbumItems.add(new Category(R.mipmap.recommend_radio, "新专辑上架"));
                         for (int i = 0; i < 6; i++) {
