@@ -121,6 +121,7 @@ public class SonglistDetailActivity extends BaseActivity {
                 });
             }
         });
+
         adapterWrapper = new HeaderFooterAdapterWrapper(context, R.layout.item_songs_in_songlist, songInSonglistAdapter);
         View headerView = LayoutInflater.from(context).inflate(R.layout.item_header_songs_in_songlist, songsInSonglistRv, false);
         songlistCountTv = (TextView) headerView.findViewById(R.id.tv_song_count);
@@ -140,6 +141,7 @@ public class SonglistDetailActivity extends BaseActivity {
                 });
             }
         });
+
         songsInSonglistRv.setAdapter(adapterWrapper);
     }
 
@@ -189,30 +191,5 @@ public class SonglistDetailActivity extends BaseActivity {
                     }
                 });
     }
-
-//    @Override
-//    public void onClick(View view, int position) {
-//        switch (view.getId()) {
-//            case R.layout.item_header_songs_in_songlist:
-//                Toast.makeText(context, "播放所有歌曲", Toast.LENGTH_SHORT).show();
-//                break;
-//
-//            case R.layout.item_songs_in_songlist:
-//                View itemLayout = view.findViewById(R.layout.item_songs_in_songlist);
-//                // 整体item的点击事件, 跳转到播放页面
-//                Toast.makeText(context, "跳转去播放页面", Toast.LENGTH_SHORT).show();
-//                // songItem 每一项菜单的点击事件
-//                // 弹出popupwindow，主要包含 下一首播放、收藏、分享等功能
-//                ImageView songMenuIv = (ImageView) itemLayout.findViewById(R.id.ib_song_menu);
-//                songMenuIv.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(context, "跳转去菜单", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//                break;
-//        }
-//
-//    }
 
 }
