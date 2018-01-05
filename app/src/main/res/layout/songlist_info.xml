@@ -5,13 +5,21 @@
     android:paddingTop="10dp">
 
     <!--歌单图片-->
-    <com.facebook.drawee.view.SimpleDraweeView
+    <!--<com.facebook.drawee.view.SimpleDraweeView-->
+    <!--android:id="@+id/dv_songlist_pic"-->
+    <!--android:layout_width="150dp"-->
+    <!--android:layout_height="150dp"-->
+    <!--android:paddingLeft="10dp"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:src="@mipmap/songlist_pic" />-->
+
+    <!--歌单图片-->
+    <ImageView
         android:id="@+id/dv_songlist_pic"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:paddingLeft="10dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/songlist_pic" />
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="match_parent"

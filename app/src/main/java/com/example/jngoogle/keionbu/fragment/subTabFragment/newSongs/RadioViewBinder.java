@@ -50,8 +50,8 @@ public class RadioViewBinder extends ItemViewBinder<Radio, RadioViewBinder.ViewH
 
             Glide.with(ActivitiesUtil.getActivity(coverIv))
                     .load(radio.coverUri)
+                    .placeholder(R.mipmap.placeholder_disk_210)
                     .into(coverIv);
-
             titleTv.setText(radio.title);
             descTv.setText(radio.desc);
         }

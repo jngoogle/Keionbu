@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.jngoogle.keionbu.R;
 import com.example.jngoogle.keionbu.activity.VedioActivity;
 import com.example.jngoogle.keionbu.adapter.AdsViewPagerAdapter;
@@ -32,7 +33,6 @@ import com.example.jngoogle.keionbu.network.entity.RadioEntity;
 import com.example.jngoogle.keionbu.network.serviceManger.ServiceManger;
 import com.example.jngoogle.keionbu.util.Const;
 import com.example.jngoogle.keionbu.util.MySubscriber;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +48,8 @@ import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
+//import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
  * 新曲板块
@@ -215,7 +217,6 @@ public class NewSongsFragment extends Fragment {
     }
 
     /**
-     *
      * 重新加载数据，处理布局顺序问题
      */
     private void reloadItems() {
@@ -358,15 +359,24 @@ public class NewSongsFragment extends Fragment {
      */
     private View initItemView(Uri uri) {
         View layout = LayoutInflater.from(getContext()).inflate(R.layout.item_ad_viewpager, null);
-        SimpleDraweeView draweeView = (SimpleDraweeView) layout.findViewById(R.id.iv_ad);
-        draweeView.setImageURI(uri);
-        draweeView.setScaleType(ImageView.ScaleType.FIT_XY);
-        draweeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), VedioActivity.class));
-            }
+        ImageView adIv = (ImageView) layout.findViewById(R.id.iv_ad);
+        Glide.with(this)
+                .load(uri)
+                .placeholder(R.mipmap.placeholder_disk_210)
+                .into(adIv);
+
+        adIv.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), VedioActivity.class));
         });
+//        SimpleDraweeView draweeView = (SimpleDraweeView) layout.findViewById(R.id.iv_ad);
+//        draweeView.setImageURI(uri);
+//        draweeView.setScaleType(ImageView.ScaleType.FIT_XY);
+//        draweeView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(getContext(), VedioActivity.class));
+//            }
+//        });
         return layout;
     }
 

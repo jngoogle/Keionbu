@@ -2,7 +2,6 @@ package com.example.jngoogle.keionbu.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,8 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.jngoogle.keionbu.R;
 import com.example.jngoogle.keionbu.adapter.CommonRecyclerAdapter;
 import com.example.jngoogle.keionbu.adapter.HeaderFooterAdapterWrapper;
@@ -22,7 +24,6 @@ import com.example.jngoogle.keionbu.network.serviceManger.ServiceManger;
 import com.example.jngoogle.keionbu.util.Const;
 import com.example.jngoogle.keionbu.util.DividerItemDecoration;
 import com.example.jngoogle.keionbu.util.MySubscriber;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
@@ -37,14 +38,14 @@ import rx.schedulers.Schedulers;
 /**
  * 歌单详情页
  */
-public class SonglistDetailActivity extends BaseActivity implements CommonRecyclerAdapter.IOnItemClickListener {
+public class SonglistDetailActivity extends BaseActivity {
 
     private static String methodPara = Const.methodSongsInSongListPara;
     private Context context;
     @BindView(R.id.toolbar_songlist_detail)
     Toolbar toolbar;
     @BindView(R.id.dv_songlist_pic)
-    SimpleDraweeView songlistPic;
+    ImageView songlistPic;
     @BindView(R.id.tv_songlist_title)
     MarqueeTextview songlistTitleTv;
     @BindView(R.id.tv_songlist_tag)
@@ -104,10 +105,42 @@ public class SonglistDetailActivity extends BaseActivity implements CommonRecycl
         songsInSonglistRv.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL_LIST));
 
         songInSonglistAdapter = new SongInSonglistAdapter(context, R.layout.item_songs_in_songlist);
+        songInSonglistAdapter.setOnItemClickListener(new CommonRecyclerAdapter.IOnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                // 整体item的点击事件, 跳转到播放页面
+                Toast.makeText(context, "跳转去播放页面", Toast.LENGTH_SHORT).show();
+                // songItem 每一项菜单的点击事件
+                // 弹出popupwindow，主要包含 下一首播放、收藏、分享等功能
+                ImageView songMenuIv = (ImageView) view.findViewById(R.id.ib_song_menu);
+                songMenuIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "跳转去菜单", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
         adapterWrapper = new HeaderFooterAdapterWrapper(context, R.layout.item_songs_in_songlist, songInSonglistAdapter);
         View headerView = LayoutInflater.from(context).inflate(R.layout.item_header_songs_in_songlist, songsInSonglistRv, false);
         songlistCountTv = (TextView) headerView.findViewById(R.id.tv_song_count);
         adapterWrapper.addHeaderView(headerView);
+        adapterWrapper.setOnItemClickListener(new CommonRecyclerAdapter.IOnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                // header 整体点击事件
+                Toast.makeText(context, "播放所有歌曲页面", Toast.LENGTH_SHORT).show();
+                // header 菜单点击事件
+                ImageView songMenuIv = (ImageView) view.findViewById(R.id.ib_song_menu);
+                songMenuIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "header跳转去菜单", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        songsInSonglistRv.setAdapter(adapterWrapper);
     }
 
     /**
@@ -138,13 +171,16 @@ public class SonglistDetailActivity extends BaseActivity implements CommonRecycl
                     public void onNext(List<SongsInSongListEntity.ContentBean> contentBeans) {
                         if (contentBeans != null) {
                             songInSonglistAdapter.setDataList(contentBeans);
-                            songsInSonglistRv.setAdapter(adapterWrapper);
                             songlistCountTv.setText(contentBeans.size() + "");
                         }
 
                         songlistTitleTv.setText(songlistTitle);
-                        songlistPic.setImageURI(Uri.parse(songlistPicUrl));
+//                        songlistPic.setImageURI(Uri.parse(songlistPicUrl));
                         songlistTagTv.setText(songlistTag);
+                        Glide.with(context)
+                                .load(songlistPicUrl)
+                                .placeholder(R.mipmap.placeholder_disk_210)
+                                .into(songlistPic);
                     }
 
                     @Override
@@ -154,8 +190,29 @@ public class SonglistDetailActivity extends BaseActivity implements CommonRecycl
                 });
     }
 
-    @Override
-    public void onClick(View view, int position) {
-        // 跳转到歌曲播放页
-    }
+//    @Override
+//    public void onClick(View view, int position) {
+//        switch (view.getId()) {
+//            case R.layout.item_header_songs_in_songlist:
+//                Toast.makeText(context, "播放所有歌曲", Toast.LENGTH_SHORT).show();
+//                break;
+//
+//            case R.layout.item_songs_in_songlist:
+//                View itemLayout = view.findViewById(R.layout.item_songs_in_songlist);
+//                // 整体item的点击事件, 跳转到播放页面
+//                Toast.makeText(context, "跳转去播放页面", Toast.LENGTH_SHORT).show();
+//                // songItem 每一项菜单的点击事件
+//                // 弹出popupwindow，主要包含 下一首播放、收藏、分享等功能
+//                ImageView songMenuIv = (ImageView) itemLayout.findViewById(R.id.ib_song_menu);
+//                songMenuIv.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(context, "跳转去菜单", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//                break;
+//        }
+//
+//    }
+
 }

@@ -48,8 +48,8 @@ public class NewAlbumViewBinder extends ItemViewBinder<NewAlbum, NewAlbumViewBin
         public void bind(NewAlbum newAlbum) {
             Glide.with(ActivitiesUtil.getActivity(coverIv))
                     .load(newAlbum.coverUri)
+                    .placeholder(R.mipmap.placeholder_disk_210)
                     .into(coverIv);
-
             titleTv.setText(newAlbum.title);
             authorTv.setText(newAlbum.author);
         }

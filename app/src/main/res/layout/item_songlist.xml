@@ -12,12 +12,18 @@
         android:layout_gravity="top"
         android:layout_weight="3">
 
-        <com.facebook.drawee.view.SimpleDraweeView
+        <!--<com.facebook.drawee.view.SimpleDraweeView-->
+        <!--android:id="@+id/songlist_image"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:src="@mipmap/ad_five"-->
+        <!--fresco:failureImage="@mipmap/placeholder_disk_210" />-->
+
+        <ImageView
             android:id="@+id/songlist_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@mipmap/ad_five"
-            fresco:failureImage="@mipmap/placeholder_disk_210" />
+            android:src="@mipmap/ad_five" />
 
         <LinearLayout
             android:layout_width="match_parent"

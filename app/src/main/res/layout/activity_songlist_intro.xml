@@ -41,11 +41,18 @@
                 android:orientation="vertical">
 
                 <!--歌单封面图片-->
-                <com.facebook.drawee.view.SimpleDraweeView
+                <!--<com.facebook.drawee.view.SimpleDraweeView-->
+                    <!--android:id="@+id/dv_songlist_pic"-->
+                    <!--android:layout_width="150dp"-->
+                    <!--android:layout_height="150dp"-->
+                    <!--android:layout_marginTop="15dp" />-->
+
+                <!--歌单封面图-->
+                <ImageView
                     android:id="@+id/dv_songlist_pic"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:layout_marginTop="15dp" />
+                    android:layout_marginTop="15dp"/>
 
                 <TextView
                     android:id="@+id/tv_songlist_title"

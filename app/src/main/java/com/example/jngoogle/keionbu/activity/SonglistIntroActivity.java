@@ -1,11 +1,9 @@
 package com.example.jngoogle.keionbu.activity;
 
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,15 +14,11 @@ import com.example.jngoogle.keionbu.network.entity.SongsInSongListEntity;
 import com.example.jngoogle.keionbu.network.serviceManger.ServiceManger;
 import com.example.jngoogle.keionbu.util.Const;
 import com.example.jngoogle.keionbu.util.MySubscriber;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class SonglistIntroActivity extends BaseActivity {
@@ -36,7 +30,7 @@ public class SonglistIntroActivity extends BaseActivity {
     @BindView(R.id.iv_close)
     ImageView closeIv;
     @BindView(R.id.dv_songlist_pic)
-    SimpleDraweeView songlistPicDv;
+    ImageView songlistPicDv;
     @BindView(R.id.tv_songlist_title)
     TextView songlistTitleTv;
     @BindView(R.id.tv_songlist_spec)
@@ -86,7 +80,6 @@ public class SonglistIntroActivity extends BaseActivity {
                             Spannable textSpan = new SpannableString(songlistDesc);
                             textSpan.setSpan(new AbsoluteSizeSpan(46), 0, 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                             songlistSpecTv.setText(textSpan);// 歌单介绍
-
 //                            songlistSpecTv.setText(songsInSongListEntity.getDesc());
                             songlistTitleTv.setText(songsInSongListEntity.getTitle());// 歌单名
                             songlistTagTv.setText(songsInSongListEntity.getTag());// 歌单tag

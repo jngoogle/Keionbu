@@ -10,7 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.bumptech.glide.Glide;
+//import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -168,16 +169,54 @@ public abstract class CommonRecyclerAdapter<Data> extends RecyclerView.Adapter<R
             return this;
         }
 
+//        已废弃不用fresco 改用Glide
+//        public MyViewHolder setImageUri(int viewId, Uri uri) {
+//            SimpleDraweeView view = getView(viewId);
+//            view.setImageURI(uri);
+//            return this;
+//        }
 
-        public MyViewHolder setImageUri(int viewId, Uri uri) {
-            SimpleDraweeView view = getView(viewId);
-            view.setImageURI(uri);
+        // use glide to load image by imageuri
+        public MyViewHolder setImageUriGlide(int viewId, Uri uri) {
+            ImageView imageView = getView(viewId);
+            Glide.with(context)
+                    .load(uri)
+                    .into(imageView);
             return this;
         }
 
-        // use glide to load image by imageuri
-        public MyViewHolder setImageUriGlide() {
+        /**
+         * use glide to load image
+         * @param viewId
+         * @param uri
+         * @param placeHolder
+         * @return
+         */
+        public MyViewHolder setImageUriGlide(int viewId, Uri uri, int placeHolder) {
+            ImageView imageView = getView(viewId);
+            Glide.with(context)
+                    .load(uri)
+                    .placeholder(placeHolder)
+                    .into(imageView);
+            return this;
+        }
 
+        /**
+         * use glide to load image
+         *
+         * @param viewId
+         * @param uri
+         * @param placeHolder picture placeholder
+         * @param errorId use this pic when network abort
+         * @return
+         */
+        public MyViewHolder setImageUriGlide(int viewId, Uri uri, int placeHolder, int errorId) {
+            ImageView imageView = getView(viewId);
+            Glide.with(context)
+                    .load(uri)
+                    .placeholder(placeHolder)
+                    .error(errorId)
+                    .into(imageView);
             return this;
         }
 
