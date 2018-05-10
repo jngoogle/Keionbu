@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.jngoogle.keionbu.R;
 import com.example.jngoogle.keionbu.adapter.CommonRecyclerAdapter;
+import com.example.jngoogle.keionbu.adapter.HeaderAdapterWrapper;
 import com.example.jngoogle.keionbu.adapter.HeaderFooterAdapterWrapper;
 import com.example.jngoogle.keionbu.adapter.SongInSonglistAdapter;
 import com.example.jngoogle.keionbu.customView.MarqueeTextview;
@@ -58,6 +59,7 @@ public class SonglistDetailActivity extends BaseActivity {
     private TextView songlistCountTv;
     private SongInSonglistAdapter songInSonglistAdapter;
     private HeaderFooterAdapterWrapper adapterWrapper;
+    private HeaderAdapterWrapper headerAdapterWrapper;
     private String listid;// 歌单id
     private String songlistTitle;// 歌单标题
     private String songlistPicUrl;// 歌单封面图
@@ -122,27 +124,34 @@ public class SonglistDetailActivity extends BaseActivity {
             }
         });
 
-        adapterWrapper = new HeaderFooterAdapterWrapper(context, R.layout.item_songs_in_songlist, songInSonglistAdapter);
+        headerAdapterWrapper = new HeaderAdapterWrapper(context, songInSonglistAdapter);
         View headerView = LayoutInflater.from(context).inflate(R.layout.item_header_songs_in_songlist, songsInSonglistRv, false);
         songlistCountTv = (TextView) headerView.findViewById(R.id.tv_song_count);
-        adapterWrapper.addHeaderView(headerView);
-        adapterWrapper.setOnItemClickListener(new CommonRecyclerAdapter.IOnItemClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                // header 整体点击事件
-                Toast.makeText(context, "播放所有歌曲页面", Toast.LENGTH_SHORT).show();
-                // header 菜单点击事件
-                ImageView songMenuIv = (ImageView) view.findViewById(R.id.ib_song_menu);
-                songMenuIv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(context, "header跳转去菜单", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
+        headerAdapterWrapper.addHeaderView(headerView);
+        songsInSonglistRv.setAdapter(headerAdapterWrapper);
 
-        songsInSonglistRv.setAdapter(adapterWrapper);
+//        adapterWrapper = new HeaderFooterAdapterWrapper(context, songInSonglistAdapter);
+//        View headerView = LayoutInflater.from(context).inflate(R.layout.item_header_songs_in_songlist, songsInSonglistRv, false);
+//        songlistCountTv = (TextView) headerView.findViewById(R.id.tv_song_count);
+//        adapterWrapper.addHeaderView(headerView);
+//        adapterWrapper.setOnItemClickListener(new CommonRecyclerAdapter.IOnItemClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                // header 整体点击事件
+//                Toast.makeText(context, "播放所有歌曲页面", Toast.LENGTH_SHORT).show();
+//                // header 菜单点击事件
+//                ImageView songMenuIv = (ImageView) view.findViewById(R.id.ib_song_menu);
+//                songMenuIv.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(context, "header跳转去菜单", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//            }
+//        });
+//
+//        songsInSonglistRv.setAdapter(adapterWrapper);
+
     }
 
     /**

@@ -5,7 +5,6 @@ import android.view.View;
 
 import com.example.jngoogle.keionbu.R;
 import com.example.jngoogle.keionbu.network.entity.SongsInSongListEntity;
-import com.example.jngoogle.keionbu.viewHolder.CommonViewHolder;
 
 /**
  * Created by jngoogle on 2017/5/18.
@@ -28,6 +27,13 @@ public class SongInSonglistAdapter extends CommonRecyclerAdapter<SongsInSongList
         } else {
             holder.getView(R.id.tv_album_title).setVisibility(View.GONE);
         }
+
+        holder.getView(R.id.ib_song_menu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
 }

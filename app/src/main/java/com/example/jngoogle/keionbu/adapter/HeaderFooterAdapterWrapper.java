@@ -11,7 +11,7 @@ import android.view.ViewGroup;
  * mInnerAdapter 原本已经写好的adapter且数据绑定在此adapter上
  */
 
-public class HeaderFooterAdapterWrapper extends SongInSonglistAdapter {
+public class HeaderFooterAdapterWrapper extends CommonRecyclerAdapter {
     private static final int BASE_ITEM_TYPE_HEADER = 100000;
     private static final int BASE_ITEM_TYPE_FOOTER = 200000;
 
@@ -20,16 +20,25 @@ public class HeaderFooterAdapterWrapper extends SongInSonglistAdapter {
 
     private RecyclerView.Adapter mInnerAdapter;
 
+    public HeaderFooterAdapterWrapper(Context context, RecyclerView.Adapter adapter) {
+        this(context, 0, adapter);
+    }
+
     public HeaderFooterAdapterWrapper(Context context, int resId, RecyclerView.Adapter adapter) {
         super(context, resId);
         mInnerAdapter = adapter;
     }
 
     @Override
+    public void bindData(MyViewHolder holder, int position, Object itemData) {
+        //这里使用空实现，真正绑定数据由inneradapter去实现
+    }
+
+    @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (mHeaderViews.get(viewType) != null) {
+        if (mHeaderViews.valueAt(viewType) != null) {
             return new MyViewHolder(parent.getContext(), mHeaderViews.get(viewType));
-        } else if (mFootViews.get(viewType) != null) {
+        } else if (mFootViews.valueAt(viewType) != null) {
             return new MyViewHolder(parent.getContext(), mFootViews.get(viewType));
         }
         return mInnerAdapter.onCreateViewHolder(parent, viewType);
