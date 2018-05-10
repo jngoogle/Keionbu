@@ -2,7 +2,7 @@ package com.example.jngoogle.keionbu;
 
 import android.app.Application;
 
-import com.facebook.drawee.backends.pipeline.Fresco;
+//import com.facebook.drawee.backends.pipeline.Fresco;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -16,13 +16,13 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        initFresco();
+//        initFresco();
         initCustomFont();
     }
 
-    private void initFresco() {
-        Fresco.initialize(this);
-    }
+//    private void initFresco() {
+//        Fresco.initialize(this);
+//    }
 
     private void initCustomFont() {
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()

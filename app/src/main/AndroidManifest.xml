@@ -26,7 +26,7 @@
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.VedioActivity" />
         <activity android:name=".activity.SonglistDetailActivity" />
-        <activity android:name=".activity.SonglistIntroActivity"/>
+        <activity android:name=".activity.SonglistIntroActivity" />
     </application>
 
 </manifest>

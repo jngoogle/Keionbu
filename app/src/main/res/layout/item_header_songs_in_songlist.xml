@@ -6,16 +6,14 @@
     android:orientation="horizontal">
 
     <!--歌曲编号区-->
-    <TextView
+    <ImageView
         android:id="@+id/tv_song_number"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:gravity="center"
-        android:paddingBottom="16dp"
-        android:text="1"
-        android:textColor="@color/color999"
-        android:textSize="16sp" />
+        android:padding="10dp"
+        android:src="@mipmap/playbar_btn_play" />
 
     <!--歌曲信息区-->
     <LinearLayout
@@ -25,51 +23,48 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/ly_item_song"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <!--song info-->
+            <!--播放全部歌曲-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="6"
-                android:orientation="vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_song_title"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:lines="1"
-                    android:paddingBottom="6dp"
-                    android:paddingTop="16dp"
-                    android:text="夜曲"
-                    android:textColor="@color/color2b"
-                    android:textSize="15sp" />
+                    android:text="播放全部歌曲" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginLeft="4dp"
+                    android:text="(共"
+                    android:textColor="@color/color999"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/tv_author"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="周杰伦"
-                        android:textSize="12sp" />
+                <!--歌曲数量-->
+                <TextView
+                    android:id="@+id/tv_song_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="2dp"
+                    android:text="0"
+                    android:textColor="@color/color999"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/tv_album_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:lines="1"
-                        android:text="十一月的肖邦"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="首)"
+                    android:textColor="@color/color999"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 

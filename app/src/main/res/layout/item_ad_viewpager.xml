@@ -7,11 +7,16 @@
     android:layout_height="match_parent"
     tools:context="com.example.jngoogle.keionbu.activity.SplashActivity">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <!--<com.facebook.drawee.view.SimpleDraweeView-->
+    <!--android:id="@+id/iv_ad"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--fresco:actualImageScaleType="fitXY"-->
+    <!--fresco:failureImage="@mipmap/ad_five" />-->
+
+    <ImageView
         android:id="@+id/iv_ad"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        fresco:actualImageScaleType="fitXY"
-        fresco:failureImage="@mipmap/ad_five" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

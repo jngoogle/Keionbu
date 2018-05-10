@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +17,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.jngoogle.keionbu.R;
 import com.example.jngoogle.keionbu.activity.VedioActivity;
 import com.example.jngoogle.keionbu.adapter.AdsViewPagerAdapter;
 import com.example.jngoogle.keionbu.customView.FeatureTabView;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Category;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.CategoryViewBinder;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.NewAlbum;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.NewAlbumViewBinder;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.Radio;
+import com.example.jngoogle.keionbu.fragment.subTabFragment.newSongs.RadioViewBinder;
 import com.example.jngoogle.keionbu.network.entity.AdsEntity;
+import com.example.jngoogle.keionbu.network.entity.NewAlbumEntity;
 import com.example.jngoogle.keionbu.network.entity.RadioEntity;
 import com.example.jngoogle.keionbu.network.serviceManger.ServiceManger;
 import com.example.jngoogle.keionbu.util.Const;
 import com.example.jngoogle.keionbu.util.MySubscriber;
-import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,10 +43,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.drakeet.multitype.Items;
+import me.drakeet.multitype.MultiTypeAdapter;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
+//import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
  * 新曲板块
@@ -47,6 +60,9 @@ public class NewSongsFragment extends Fragment {
     private static final int AUTO_SCORLLING = 1;// 自动播放viewpager
     private static String methodAdsPara = Const.methodAdsPicPara;// 获取轮播宣传图参数
     private static String methodSonglistPara = Const.methodSonglistPara;// 获取歌单的参数
+    private static String methodRadioPara = Const.methodRadioPara;// 获取歌单的参数
+    private static String methodNewAlbumPara = Const.methodNewAlbumPara;// 获取新专辑的参数
+
     private static int adsPicNum = Const.ADS_PIC_NUM;
 
     private List<View> adViews = new ArrayList<View>();
@@ -67,8 +83,12 @@ public class NewSongsFragment extends Fragment {
     FeatureTabView keionbuBillboard;// 轻音社音乐榜
     @BindView(R.id.change_item_position)
     Button changeItemPositionBtn;// 更改栏目顺序功能按钮
-    @BindView(R.id.test_api)
-    TextView testApiTv;
+    @BindView(R.id.rv_radio)
+    RecyclerView radioRv;// 推荐电台列表
+
+    Items items;
+    Items radioItems, newAlbumItems;
+    MultiTypeAdapter multiTypeAdapter;
 
     private Handler handler = new Handler() {
         @Override
@@ -110,6 +130,7 @@ public class NewSongsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_songs, container, false);
         ButterKnife.bind(this, view);
         initFeatureTabView();
+        initRadioView();
         return view;
     }
 
@@ -117,6 +138,7 @@ public class NewSongsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getAdsPic(methodAdsPara, adsPicNum);
+        loadData();
         Message msg = Message.obtain();
         msg.what = AUTO_SCORLLING;
         handler.sendEmptyMessageDelayed(AUTO_SCORLLING, 2000);
@@ -162,6 +184,47 @@ public class NewSongsFragment extends Fragment {
 
                 break;
         }
+    }
+
+    /**
+     * 定义推荐电台列表展示
+     */
+    private void initRadioView() {
+        items = new Items();
+        radioItems = new Items();
+        newAlbumItems = new Items();
+        multiTypeAdapter = new MultiTypeAdapter();
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), Const.SPAN_COUNT_RADIO);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return items.get(position) instanceof Category ? Const.SPAN_COUNT_RADIO : 1;
+            }
+        });
+
+        radioRv.setLayoutManager(gridLayoutManager);
+        multiTypeAdapter.register(Category.class, new CategoryViewBinder());
+        multiTypeAdapter.register(Radio.class, new RadioViewBinder());
+        multiTypeAdapter.register(NewAlbum.class, new NewAlbumViewBinder());
+        multiTypeAdapter.setItems(items);
+        radioRv.setAdapter(multiTypeAdapter);
+
+    }
+
+    private void loadData() {
+        getRecommendRadio(methodRadioPara);
+        getNewAlbumList(methodNewAlbumPara);
+    }
+
+    /**
+     * 重新加载数据，处理布局顺序问题
+     */
+    private void reloadItems() {
+        items.clear();
+        items.addAll(radioItems);
+        items.addAll(newAlbumItems);
+        multiTypeAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -227,12 +290,58 @@ public class NewSongsFragment extends Fragment {
                 .subscribe(new MySubscriber<List<RadioEntity.RadioBean>>(getContext()) {
                     @Override
                     public void onNext(List<RadioEntity.RadioBean> radioBeanList) {
-                        testApiTv.setText(radioBeanList.get(0).getTitle());
+                        radioItems.clear();
+                        radioItems.add(new Category(R.mipmap.recommend_radio, "推荐电台"));
+                        for (int i = 0; i < 6; i++) {
+                            radioItems.add(new Radio(
+                                    Uri.parse(radioBeanList.get(i).getPic()),
+                                    radioBeanList.get(i).getTitle(),
+                                    radioBeanList.get(i).getDesc()));
+                        }
+
+                        reloadItems();
                     }
                 });
     }
 
     /**
+<<<<<<< HEAD
+=======
+     * 获取新专辑
+     */
+    public void getNewAlbumList(String methodNewAlbumPara) {
+        ServiceManger.getInstance()
+                .getiNewAlbumService()
+                .getNewAlbumList(methodNewAlbumPara)// 这里获取新专辑的层级有点多，需要仔细
+                .flatMap(new Func1<NewAlbumEntity, Observable<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean>>() {
+                    @Override
+                    public Observable<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> call(NewAlbumEntity newAlbumEntity) {
+                        return Observable.from(newAlbumEntity.getPlaze_album_list().getRM().getAlbum_list().getList());
+                    }
+                })
+                .toList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new MySubscriber<List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean>>(getContext()) {
+                    @Override
+                    public void onNext(List<NewAlbumEntity.PlazeAlbumListBean.RMBean.AlbumListBean.ListBean> listBean) {
+                        newAlbumItems.clear();
+                        newAlbumItems.add(new Category(R.mipmap.recommend_radio, "新专辑上架"));
+                        for (int i = 0; i < 6; i++) {
+                            newAlbumItems.add(new NewAlbum(
+                                    Uri.parse(listBean.get(i).getPic_radio()),
+                                    listBean.get(i).getTitle(),
+                                    listBean.get(i).getAuthor()));
+                        }
+
+                        reloadItems();
+                    }
+                });
+
+    }
+
+    /**
+>>>>>>> dev
      * @param strings 宣传图的uriList
      */
     private void initViewPager(List<String> strings) {
@@ -254,15 +363,24 @@ public class NewSongsFragment extends Fragment {
      */
     private View initItemView(Uri uri) {
         View layout = LayoutInflater.from(getContext()).inflate(R.layout.item_ad_viewpager, null);
-        SimpleDraweeView draweeView = (SimpleDraweeView) layout.findViewById(R.id.iv_ad);
-        draweeView.setImageURI(uri);
-        draweeView.setScaleType(ImageView.ScaleType.FIT_XY);
-        draweeView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getContext(), VedioActivity.class));
-            }
+        ImageView adIv = (ImageView) layout.findViewById(R.id.iv_ad);
+        Glide.with(this)
+                .load(uri)
+                .placeholder(R.mipmap.placeholder_disk_210)
+                .into(adIv);
+
+        adIv.setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), VedioActivity.class));
         });
+//        SimpleDraweeView draweeView = (SimpleDraweeView) layout.findViewById(R.id.iv_ad);
+//        draweeView.setImageURI(uri);
+//        draweeView.setScaleType(ImageView.ScaleType.FIT_XY);
+//        draweeView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(getContext(), VedioActivity.class));
+//            }
+//        });
         return layout;
     }
 

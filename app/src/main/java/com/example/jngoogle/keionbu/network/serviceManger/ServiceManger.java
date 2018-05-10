@@ -4,6 +4,7 @@ import
         com.example.jngoogle.keionbu.BuildConfig;
 import com.example.jngoogle.keionbu.network.service.IAdsPicService;
 import com.example.jngoogle.keionbu.network.service.IBillSongListService;
+import com.example.jngoogle.keionbu.network.service.INewAlbumService;
 import com.example.jngoogle.keionbu.network.service.IRadioService;
 import com.example.jngoogle.keionbu.network.service.ISearchWordsService;
 import com.example.jngoogle.keionbu.network.service.ISongListService;
@@ -66,6 +67,7 @@ public class ServiceManger {
     private ISongListService iSongListService = retrofit.create(ISongListService.class);
     private ISongsInSongListService iSongsInSongListService = retrofit.create(ISongsInSongListService.class);
     private IRadioService iRadioService = retrofit.create(IRadioService.class);
+    private INewAlbumService iNewAlbumService = retrofit.create(INewAlbumService.class);
 
 
     // 获取榜单歌曲
@@ -96,5 +98,10 @@ public class ServiceManger {
     // 获取推荐电台
     public IRadioService getiRadioService() {
         return iRadioService;
+    }
+
+    // 获取新专辑上架
+    public INewAlbumService getiNewAlbumService() {
+        return iNewAlbumService;
     }
 }

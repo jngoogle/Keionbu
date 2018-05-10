@@ -2,7 +2,6 @@ package com.example.jngoogle.keionbu.viewHolder;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+//import com.facebook.drawee.view.SimpleDraweeView;
 
 /**
  * Created by jngoogle on 2017/2/22 15:11.
@@ -153,12 +152,12 @@ public class CommonViewHolder {
      * @param picUrl - 使用Fresco框架加载服务器的图片
      * @return ViewHolder
      */
-    public CommonViewHolder setImageResource(int viewId, String picUrl) {
-        SimpleDraweeView view = getView(viewId);
-        view.setImageURI(Uri.parse(picUrl));
-
-        return this;
-    }
+//    public CommonViewHolder setImageResource(int viewId, String picUrl) {
+//        SimpleDraweeView view = getView(viewId);
+//        view.setImageURI(Uri.parse(picUrl));
+//
+//        return this;
+//    }
 
 
     /**
