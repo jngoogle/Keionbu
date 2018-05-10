@@ -36,9 +36,9 @@ public class HeaderFooterAdapterWrapper extends CommonRecyclerAdapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (mHeaderViews.valueAt(viewType) != null) {
+        if (mHeaderViews.get(viewType) != null) {
             return new MyViewHolder(parent.getContext(), mHeaderViews.get(viewType));
-        } else if (mFootViews.valueAt(viewType) != null) {
+        } else if (mFootViews.get(viewType) != null) {
             return new MyViewHolder(parent.getContext(), mFootViews.get(viewType));
         }
         return mInnerAdapter.onCreateViewHolder(parent, viewType);

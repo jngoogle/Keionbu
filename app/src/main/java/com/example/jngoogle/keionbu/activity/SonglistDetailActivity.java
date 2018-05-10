@@ -124,33 +124,33 @@ public class SonglistDetailActivity extends BaseActivity {
             }
         });
 
-        headerAdapterWrapper = new HeaderAdapterWrapper(context, songInSonglistAdapter);
-        View headerView = LayoutInflater.from(context).inflate(R.layout.item_header_songs_in_songlist, songsInSonglistRv, false);
-        songlistCountTv = (TextView) headerView.findViewById(R.id.tv_song_count);
-        headerAdapterWrapper.addHeaderView(headerView);
-        songsInSonglistRv.setAdapter(headerAdapterWrapper);
-
-//        adapterWrapper = new HeaderFooterAdapterWrapper(context, songInSonglistAdapter);
+//        headerAdapterWrapper = new HeaderAdapterWrapper(context, songInSonglistAdapter);
 //        View headerView = LayoutInflater.from(context).inflate(R.layout.item_header_songs_in_songlist, songsInSonglistRv, false);
 //        songlistCountTv = (TextView) headerView.findViewById(R.id.tv_song_count);
-//        adapterWrapper.addHeaderView(headerView);
-//        adapterWrapper.setOnItemClickListener(new CommonRecyclerAdapter.IOnItemClickListener() {
-//            @Override
-//            public void onClick(View view, int position) {
-//                // header 整体点击事件
-//                Toast.makeText(context, "播放所有歌曲页面", Toast.LENGTH_SHORT).show();
-//                // header 菜单点击事件
-//                ImageView songMenuIv = (ImageView) view.findViewById(R.id.ib_song_menu);
-//                songMenuIv.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(context, "header跳转去菜单", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
-//        });
-//
-//        songsInSonglistRv.setAdapter(adapterWrapper);
+//        headerAdapterWrapper.addHeaderView(headerView);
+//        songsInSonglistRv.setAdapter(headerAdapterWrapper);
+
+        adapterWrapper = new HeaderFooterAdapterWrapper(context, songInSonglistAdapter);
+        View headerView = LayoutInflater.from(context).inflate(R.layout.item_header_songs_in_songlist, songsInSonglistRv, false);
+        songlistCountTv = (TextView) headerView.findViewById(R.id.tv_song_count);
+        adapterWrapper.addHeaderView(headerView);
+        adapterWrapper.setOnItemClickListener(new CommonRecyclerAdapter.IOnItemClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                // header 整体点击事件
+                Toast.makeText(context, "播放所有歌曲页面", Toast.LENGTH_SHORT).show();
+                // header 菜单点击事件
+                ImageView songMenuIv = (ImageView) view.findViewById(R.id.ib_song_menu);
+                songMenuIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "header跳转去菜单", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        songsInSonglistRv.setAdapter(adapterWrapper);
 
     }
 
